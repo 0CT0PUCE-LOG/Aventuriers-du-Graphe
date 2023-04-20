@@ -72,7 +72,7 @@ public class Graphe {
      * @return l'ordre du graphe (le nombre de sommets)
      */
     public int nbSommets() {
-        throw new RuntimeException("Méthode non implémentée");
+        return mapAretes.size();
     }
 
     /**
@@ -80,12 +80,18 @@ public class Graphe {
      * toutes les compter)
      */
     public int nbAretes() {
-        throw new RuntimeException("Méthode non implémentée");
+        int compteur = 0;
+        for(Integer m : mapAretes.keySet()){
+            for(Arete a : mapAretes.get(m)){
+                compteur++;
+            }
+        }
+        return compteur/2;
     }
 
 
     public boolean contientSommet(Integer v) {
-        throw new RuntimeException("Méthode non implémentée");
+        return mapAretes.containsKey(v);
     }
 
     /**
@@ -94,7 +100,9 @@ public class Graphe {
      * @param v le sommet à ajouter
      */
     public void ajouterSommet(Integer v) {
-        throw new RuntimeException("Méthode non implémentée");
+        if(!mapAretes.containsKey(v)){
+            mapAretes.put(v, new HashSet<>());
+        }
     }
 
     /**
@@ -104,7 +112,10 @@ public class Graphe {
      *          alors les sommets sont automatiquement ajoutés à l'ensemble de sommets du graphe
      */
     public void ajouterArete(Arete a) {
-        throw new RuntimeException("Méthode non implémentée");
+        ajouterSommet(a.i());
+        ajouterSommet(a.j());
+        mapAretes.get(a.i()).add(a);
+        mapAretes.get(a.j()).add(a);
     }
 
     /**
@@ -114,7 +125,8 @@ public class Graphe {
      *
      */
     public void supprimerArete(Arete a) {
-        throw new RuntimeException("Méthode non implémentée");
+        mapAretes.get(a.i()).remove(a);
+        mapAretes.get(a.j()).remove(a);
     }
 
     /**
