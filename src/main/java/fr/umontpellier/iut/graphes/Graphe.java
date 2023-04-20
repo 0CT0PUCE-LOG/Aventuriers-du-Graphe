@@ -61,7 +61,16 @@ public class Graphe {
      *               prérequis : X inclus dans V()
      */
     public Graphe(Graphe graphe, Set<Integer> X) {
-        throw new RuntimeException("Méthode non implémentée");
+        this.mapAretes = new HashMap<>();
+        for(Integer sommet : X) {
+            if(graphe.contientSommet(sommet)) {
+                this.ajouterSommet(sommet);
+            }
+        }
+        Map<Integer, HashSet<Arete>> aretes = graphe.mapAretes;
+        for(Arete a : aretes){
+            if()
+        }
     }
 
     /**
