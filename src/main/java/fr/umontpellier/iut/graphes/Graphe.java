@@ -48,7 +48,9 @@ public class Graphe {
     public Graphe(Collection<Arete> aretes) {
         this();
         for (Arete a : aretes) {
-            this.ajouterArete(a);
+            if(!existeArete(a)){
+                this.ajouterArete(a);
+            }
         }
     }
 
@@ -144,7 +146,12 @@ public class Graphe {
      * @return true si a est présente dans le graphe
      */
     public boolean existeArete(Arete a) {
-        return mapAretes.containsKey(a);
+        if(contientSommet(a.i())){
+            return mapAretes.get(a.i()).contains(a);
+        }
+        else{
+            return false;
+        }
     }
 
     @Override
@@ -180,11 +187,17 @@ public class Graphe {
      * @param v le sommet à supprimer
      */
     public void supprimerSommet(int v) {
-        throw new RuntimeException("Méthode non implémentée");
+        if(contientSommet(v)){
+            for(Integer m : mapAretes.keySet()){
+                mapAretes.get(m).removeIf(arete -> arete.incidenteA(v));
+            }
+            mapAretes.remove(v);
+        }
     }
 
     public int degre(int v) {
-        throw new RuntimeException("Méthode non implémentée");
+        //TODO que faire si le sommet n'existe pas 
+        return mapAretes.get(v).size();
     }
 
     /**
@@ -222,6 +235,7 @@ public class Graphe {
      *
      */
     public boolean estComplet() {
+        //TODO peut être opti avec la fonction nbSommetDeDegre(int v) en une seule ligne
         for(Integer i : mapAretes.keySet()){
             for(Integer j : mapAretes.keySet()){
                 if(i!=j && !existeArete(new Arete(i,j))){
@@ -238,12 +252,27 @@ public class Graphe {
      * les sommets successifs de la chaîne. On considère que le graphe vide est une chaîne.
      */
     public boolean estUneChaine() {
-        for(Integer i : mapAretes.keySet()){
-            if(degre(i) != 2){
+        if(degreMax()>2){
+            return false;
+        }
+        else{
+            if(nbSommetDeDegre(1)!=2 && nbSommets()>=2){
                 return false;
             }
+            else{
+                return true;
+            }
         }
-        return true;
+    }
+
+    private int nbSommetDeDegre(int n){
+        int compteur=0;
+        for(Integer i : mapAretes.keySet()){
+            if(degre(i)==n){
+                compteur++;
+            }
+        }
+        return compteur;
     }
 
 
@@ -255,16 +284,42 @@ public class Graphe {
      * On considère que le graphe vide est un cycle.
      */
     public boolean estUnCycle() {
-        if(estUneChaine()){
-            if(mapAretes.size() == 2){
-                return false;
-            }
-            else{
-                return true;
-            }
+        if(nbSommetDeDegre(2) == nbSommets() && estConnexe()){
+            return true;
         }
         else{
             return false;
+        }
+    }
+
+    private boolean estConnexe(){
+        if(nbSommets()>=2){
+            return estConnexe( (int) mapAretes.keySet().toArray()[0], new ArrayList<>());
+        }
+        else{
+            return true;
+        }
+    }
+
+    private boolean estConnexe(int sommetCourant, ArrayList<Integer> dejaVu){
+        ArrayList<Integer> voisins = new ArrayList<>(getVoisins(sommetCourant));
+        if(dejaVu.containsAll(mapAretes.keySet())){
+            return true;
+        }
+        else if(dejaVu.containsAll(voisins)){
+            return false;
+        }
+        else{
+            boolean result = false;
+            int i=0;
+            while(i<voisins.size()){
+                if(!dejaVu.contains(voisins.get(i))){
+                    dejaVu.add(voisins.get(i));
+                    result = result || estConnexe(voisins.get(i), dejaVu);
+                }
+                i++;
+            }
+            return result;
         }
     }
 

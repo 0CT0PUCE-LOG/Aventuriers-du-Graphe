@@ -104,6 +104,102 @@ public class GrapheTest {
         assertFalse(graphe.existeArete(new Arete(8, 43)));
     }
 
+    @Test
+    void testEstUneChaine1(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(0, 1));
+        aretes.add(new Arete(1, 3));
+        aretes.add(new Arete(3, 4));
+        Graphe graphe2 = new Graphe(aretes);
+        assertTrue(graphe2.estUneChaine());
+    }
+
+    @Test
+    void testEstUneChaine2(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(0, 1));
+        aretes.add(new Arete(1, 3));
+        aretes.add(new Arete(1, 4));
+        Graphe graphe2 = new Graphe(aretes);
+        assertFalse(graphe2.estUneChaine());
+    }
+
+    @Test
+    void testEstUneChaine3(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(0, 1));
+        aretes.add(new Arete(1, 2));
+        Graphe graphe2 = new Graphe(aretes);
+        assertTrue(graphe2.estUneChaine());
+    }
+
+    @Test
+    void testEstUneChaine4(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(0, 1));
+        Graphe graphe2 = new Graphe(aretes);
+        assertTrue(graphe2.estUneChaine());
+    }
+
+    @Test
+    void testEstUneChaine5(){
+        Graphe graphe2 = new Graphe(1);
+        assertTrue(graphe2.estUneChaine());
+    }
+
+    @Test
+    void testEstUneChaine6(){
+        Graphe graphe2 = new Graphe(2);
+        assertFalse(graphe2.estUneChaine());
+    }
+
+    @Test
+    void testEstUnCycle1(){
+        Graphe graphe2 = new Graphe(0);
+        assertTrue(graphe2.estUnCycle());
+    }
+
+    @Test
+    void testEstUnCycle2(){
+        Graphe graphe2 = new Graphe(1);
+        assertFalse(graphe2.estUnCycle());
+    }
+
+    @Test
+    void testEstUnCycle3(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(0, 1));
+        aretes.add(new Arete(1, 0));
+        Graphe graphe2 = new Graphe(aretes);
+        assertEquals(graphe2.nbAretes(), 1);
+        assertEquals(graphe2.nbSommets(), 2);
+        assertFalse(graphe2.estUnCycle());
+    }
+
+    @Test
+    void testEstUnCycle4(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(0, 1));
+        aretes.add(new Arete(1, 2));
+        aretes.add(new Arete(2, 0));
+        Graphe graphe2 = new Graphe(aretes);
+        assertTrue(graphe2.estUnCycle());
+    }
+
+    @Test
+    void testEstUnCycle5(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(0, 1));
+        aretes.add(new Arete(1, 2));
+        aretes.add(new Arete(2, 0));
+        aretes.add(new Arete(3, 4));
+        aretes.add(new Arete(4, 5));
+        aretes.add(new Arete(5, 3));
+        Graphe graphe2 = new Graphe(aretes);
+        assertFalse(graphe2.estUnCycle());
+    }
+
+
     @Disabled
     @Test
     void testGetVoisins() {
