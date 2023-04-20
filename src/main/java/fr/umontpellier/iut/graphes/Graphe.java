@@ -27,7 +27,7 @@ public class Graphe {
      * Construit un graphe à n sommets 0..n-1 sans arêtes
      */
     public Graphe(int n) {
-        this.mapAretes = new HashMap<>();
+        super();
         for (int i = 0; i < n; i++) {
             this.mapAretes.put(i, new HashSet<>());
         }
@@ -46,7 +46,7 @@ public class Graphe {
      * @param aretes la collection d'arêtes
      */
     public Graphe(Collection<Arete> aretes) {
-        this.mapAretes = new HashMap<>();
+        super();
         for (Arete a : aretes) {
             this.ajouterArete(a);
         }
