@@ -110,7 +110,7 @@ public class Graphe {
      * @param v le sommet à ajouter
      */
     public void ajouterSommet(Integer v) {
-        if(!mapAretes.containsKey(v)){
+        if(!contientSommet(v)){
             mapAretes.put(v, new HashSet<>());
         }
     }
@@ -124,8 +124,10 @@ public class Graphe {
     public void ajouterArete(Arete a) {
         ajouterSommet(a.i());
         ajouterSommet(a.j());
-        mapAretes.get(a.i()).add(a);
-        mapAretes.get(a.j()).add(a);
+        if(!existeArete(a)){
+            mapAretes.get(a.i()).add(a);
+            mapAretes.get(a.j()).add(a);
+        }
     }
 
     /**
@@ -135,8 +137,10 @@ public class Graphe {
      *
      */
     public void supprimerArete(Arete a) {
-        mapAretes.get(a.i()).remove(a);
-        mapAretes.get(a.j()).remove(a);
+        if(existeArete(a)){
+            mapAretes.get(a.i()).remove(a);
+            mapAretes.get(a.j()).remove(a);
+        }
     }
 
     /**
@@ -144,7 +148,16 @@ public class Graphe {
      * @return true si a est présente dans le graphe
      */
     public boolean existeArete(Arete a) {
-        return mapAretes.containsKey(a);
+        /*
+        if(contientSommet(a.i()) && contientSommet(a.j())){
+            return mapAretes.get(a.i()).contains(a);
+        }
+        else{
+            return false;
+        }
+
+         */
+        return mapAretes.get(a.i()).contains(a);
     }
 
     @Override
@@ -164,10 +177,10 @@ public class Graphe {
      */
     public Set<Integer> getVoisins(int v) {
         Set<Integer> voisins = new HashSet<>();
-        for(Arete a : this.mapAretes.get(v)){
-            if(a.i() == v){
+        for (Arete a : this.mapAretes.get(v)) {
+            if (a.i() == v) {
                 voisins.add(a.j());
-            }else{
+            } else {
                 voisins.add(a.i());
             }
         }
@@ -180,11 +193,16 @@ public class Graphe {
      * @param v le sommet à supprimer
      */
     public void supprimerSommet(int v) {
-        throw new RuntimeException("Méthode non implémentée");
+        if(contientSommet(v)){
+            for(Arete a : mapAretes.get(v)){
+                mapAretes.get(a.getAutreSommet(v)).remove(a);
+            }
+            mapAretes.remove(v);
+        }
     }
 
     public int degre(int v) {
-        throw new RuntimeException("Méthode non implémentée");
+        return mapAretes.get(v).size();
     }
 
     /**

@@ -21,4 +21,16 @@ public record Arete(int i, int j, Route route) {
         return v == i ? j : i;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Arete arete = (Arete) o;
+        return ( (i == arete.i && j == arete.j) || (i == arete.j && j == arete.i) ) && Objects.equals(route, arete.route);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(i, j, route);
+    }
 }
