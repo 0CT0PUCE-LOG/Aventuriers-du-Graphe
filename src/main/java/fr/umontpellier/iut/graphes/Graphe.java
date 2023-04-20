@@ -37,7 +37,7 @@ public class Graphe {
      * Construit un graphe vide
      */
     public Graphe() {
-        throw new RuntimeException("Méthode non implémentée");
+        this.mapAretes = new HashMap<>();
     }
 
     /**
@@ -46,7 +46,10 @@ public class Graphe {
      * @param aretes la collection d'arêtes
      */
     public Graphe(Collection<Arete> aretes) {
-        throw new RuntimeException("Méthode non implémentée");
+        this.mapAretes = new HashMap<>();
+        for (Arete a : aretes) {
+            this.ajouterArete(a);
+        }
     }
 
     /**
