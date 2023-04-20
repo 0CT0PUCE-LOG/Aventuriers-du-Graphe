@@ -112,7 +112,7 @@ public class Graphe {
      * @param v le sommet à ajouter
      */
     public void ajouterSommet(Integer v) {
-        if(!mapAretes.containsKey(v)){
+        if(!contientSommet(v)){
             mapAretes.put(v, new HashSet<>());
         }
     }
@@ -126,8 +126,10 @@ public class Graphe {
     public void ajouterArete(Arete a) {
         ajouterSommet(a.i());
         ajouterSommet(a.j());
-        mapAretes.get(a.i()).add(a);
-        mapAretes.get(a.j()).add(a);
+        if(!existeArete(a)){
+            mapAretes.get(a.i()).add(a);
+            mapAretes.get(a.j()).add(a);
+        }
     }
 
     /**
@@ -137,8 +139,10 @@ public class Graphe {
      *
      */
     public void supprimerArete(Arete a) {
-        mapAretes.get(a.i()).remove(a);
-        mapAretes.get(a.j()).remove(a);
+        if(existeArete(a)){
+            mapAretes.get(a.i()).remove(a);
+            mapAretes.get(a.j()).remove(a);
+        }
     }
 
     /**
@@ -171,10 +175,10 @@ public class Graphe {
      */
     public Set<Integer> getVoisins(int v) {
         Set<Integer> voisins = new HashSet<>();
-        for(Arete a : this.mapAretes.get(v)){
-            if(a.i() == v){
+        for (Arete a : this.mapAretes.get(v)) {
+            if (a.i() == v) {
                 voisins.add(a.j());
-            }else{
+            } else {
                 voisins.add(a.i());
             }
         }
