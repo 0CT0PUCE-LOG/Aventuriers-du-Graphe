@@ -207,7 +207,14 @@ public class Graphe {
     }
 
     public boolean estSimple(){
-        throw new RuntimeException("Méthode non implémentée");
+        for(Integer i : mapAretes.keySet()){
+            for(Arete a : mapAretes.get(i)){
+                if(a.i()!=i && a.j()!=i){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**
@@ -215,7 +222,14 @@ public class Graphe {
      *
      */
     public boolean estComplet() {
-        throw new RuntimeException("Méthode non implémentée");
+        for(Integer i : mapAretes.keySet()){
+            for(Integer j : mapAretes.keySet()){
+                if(i!=j && !existeArete(new Arete(i,j))){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**
@@ -224,7 +238,12 @@ public class Graphe {
      * les sommets successifs de la chaîne. On considère que le graphe vide est une chaîne.
      */
     public boolean estUneChaine() {
-        throw new RuntimeException("Méthode non implémentée");
+        for(Integer i : mapAretes.keySet()){
+            if(degre(i) != 2){
+                return false;
+            }
+        }
+        return true;
     }
 
 
@@ -236,7 +255,17 @@ public class Graphe {
      * On considère que le graphe vide est un cycle.
      */
     public boolean estUnCycle() {
-           throw new RuntimeException("Méthode non implémentée");
+        if(estUneChaine()){
+            if(mapAretes.size() == 2){
+                return false;
+            }
+            else{
+                return true;
+            }
+        }
+        else{
+            return false;
+        }
     }
 
 
