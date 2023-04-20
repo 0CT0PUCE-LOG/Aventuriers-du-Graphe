@@ -75,7 +75,7 @@ public class Graphe {
      * @return l'ensemble de sommets du graphe
      */
     public Set<Integer> ensembleSommets() {
-        throw new RuntimeException("Méthode non implémentée");
+        return mapAretes.keySet();
     }
 
     /**
@@ -171,6 +171,7 @@ public class Graphe {
                 voisins.add(a.i());
             }
         }
+        return voisins;
     }
 
     /**
@@ -191,7 +192,18 @@ public class Graphe {
      * @return le degré max, et Integer.Min_VALUE si le graphe est vide
      */
     public int degreMax(){
-        throw new RuntimeException("Méthode non implémentée");
+        int degreMax = Integer.MIN_VALUE;
+        for(Integer i : mapAretes.keySet()){
+            if(degre(i) > degreMax){
+                degreMax = degre(i);
+            }
+        }
+        if(degreMax==Integer.MIN_VALUE){
+            return 0;
+        }
+        else{
+            return degreMax;
+        }
     }
 
     public boolean estSimple(){

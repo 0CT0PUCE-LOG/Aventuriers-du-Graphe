@@ -2,6 +2,8 @@ package fr.umontpellier.iut.graphes;
 
 import fr.umontpellier.iut.rails.Route;
 
+import java.util.Objects;
+
 /**
  * Classe modélisant les arêtes. Pour simplifier, vous pouvez supposer le prérequis que i!=j
  */
