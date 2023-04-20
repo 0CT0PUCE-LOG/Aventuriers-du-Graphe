@@ -146,7 +146,7 @@ public class Graphe {
      * @return true si a est présente dans le graphe
      */
     public boolean existeArete(Arete a) {
-        throw new RuntimeException("Méthode non implémentée");
+        return mapAretes.containsKey(a);
     }
 
     @Override
@@ -165,7 +165,14 @@ public class Graphe {
      * @param v l'identifiant du sommet dont on veut le voisinage
      */
     public Set<Integer> getVoisins(int v) {
-        throw new RuntimeException("Méthode non implémentée");
+        Set<Integer> voisins = new HashSet<>();
+        for(Arete a : this.mapAretes.get(v)){
+            if(a.i() == v){
+                voisins.add(a.j());
+            }else{
+                voisins.add(a.i());
+            }
+        }
     }
 
     /**
