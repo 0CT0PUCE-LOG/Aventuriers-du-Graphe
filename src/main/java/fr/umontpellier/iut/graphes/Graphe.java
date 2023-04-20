@@ -94,9 +94,7 @@ public class Graphe {
     public int nbAretes() {
         int compteur = 0;
         for(Integer m : mapAretes.keySet()){
-            for(Arete a : mapAretes.get(m)){
-                compteur++;
-            }
+            compteur+= mapAretes.get(m).size();
         }
         return compteur/2;
     }
@@ -327,6 +325,13 @@ public class Graphe {
         }
     }
 
+    private boolean estAcyclique(){
+        throw new RuntimeException("Méthode non implémentée");
+    }
+
+    private boolean estUnArbre(){
+        return estConnexe() && estAcyclique();
+    }
 
     public boolean estUneForet() {
         throw new RuntimeException("Méthode non implémentée");
