@@ -27,7 +27,7 @@ public class Graphe {
      * Construit un graphe à n sommets 0..n-1 sans arêtes
      */
     public Graphe(int n) {
-        this.mapAretes = new HashMap<>();
+        super();
         for (int i = 0; i < n; i++) {
             this.mapAretes.put(i, new HashSet<>());
         }
@@ -37,7 +37,7 @@ public class Graphe {
      * Construit un graphe vide
      */
     public Graphe() {
-        throw new RuntimeException("Méthode non implémentée");
+        this.mapAretes = new HashMap<>();
     }
 
     /**
@@ -46,7 +46,10 @@ public class Graphe {
      * @param aretes la collection d'arêtes
      */
     public Graphe(Collection<Arete> aretes) {
-        throw new RuntimeException("Méthode non implémentée");
+        super();
+        for (Arete a : aretes) {
+            this.ajouterArete(a);
+        }
     }
 
     /**
@@ -58,7 +61,16 @@ public class Graphe {
      *               prérequis : X inclus dans V()
      */
     public Graphe(Graphe graphe, Set<Integer> X) {
-        throw new RuntimeException("Méthode non implémentée");
+        this.mapAretes = new HashMap<>();
+        for(Integer sommet : X) {
+            if(graphe.contientSommet(sommet)) {
+                this.ajouterSommet(sommet);
+            }
+        }
+        Map<Integer, HashSet<Arete>> aretes = graphe.mapAretes;
+        for(Arete a : aretes){
+            if()
+        }
     }
 
     /**
