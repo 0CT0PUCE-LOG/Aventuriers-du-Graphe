@@ -1,5 +1,6 @@
 package fr.umontpellier.iut.graphes;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -40,6 +41,13 @@ public class Graphe {
         this.mapAretes = new HashMap<>();
     }
 
+    public Graphe(Graphe g) {
+        this();
+        for(int i : g.mapAretes.keySet()){
+            mapAretes.put(i, new HashSet<>(g.mapAretes.get(i)));
+        }
+    }
+
     /**
      * Construit un graphe à partir d'une collection d'arêtes.
      *
@@ -65,7 +73,7 @@ public class Graphe {
     public Graphe(Graphe graphe, Set<Integer> X) {
         this();
         for(Integer i : X){
-            for(Arete a : mapAretes.get(i)){
+            for(Arete a : graphe.mapAretes.get(i)){
                 if(X.contains(a.i()) && X.contains(a.j())){
                     ajouterArete(a);
                 }
@@ -183,6 +191,21 @@ public class Graphe {
         return voisins;
     }
 
+    public Map<Integer, Arete> getVoisinsAvecArete(int v) {
+        HashMap<Integer, Arete> voisins = new HashMap<>();
+        for (Arete a : this.mapAretes.get(v)) {
+            if (a.i() == v) {
+                voisins.put(a.j(), a);
+            } else {
+                voisins.put(a.i(), a );
+            }
+        }
+        return voisins;
+    }
+
+
+
+
     /**
      * Supprime un sommet du graphe, ainsi que toutes les arêtes incidentes à ce sommet
      *
@@ -261,6 +284,9 @@ public class Graphe {
             if(nbSommetDeDegre(1)!=2 && nbSommets()>=2){
                 return false;
             }
+            else if(!estConnexe()){
+                return false;
+            }
             else{
                 return true;
             }
@@ -294,7 +320,7 @@ public class Graphe {
         }
     }
 
-    private boolean estConnexe(){
+    public boolean estConnexe(){
         if(nbSommets()>=2){
             return estConnexe( (int) mapAretes.keySet().toArray()[0], new ArrayList<>());
         }
@@ -305,6 +331,7 @@ public class Graphe {
 
     private boolean estConnexe(int sommetCourant, ArrayList<Integer> dejaVu){
         ArrayList<Integer> voisins = new ArrayList<>(getVoisins(sommetCourant));
+        dejaVu.add(sommetCourant);
         if(dejaVu.containsAll(mapAretes.keySet())){
             return true;
         }
@@ -314,9 +341,9 @@ public class Graphe {
         else{
             boolean result = false;
             int i=0;
-            while(i<voisins.size()){
+            
+            while(i<voisins.size()&& result==false){
                 if(!dejaVu.contains(voisins.get(i))){
-                    dejaVu.add(voisins.get(i));
                     result = result || estConnexe(voisins.get(i), dejaVu);
                 }
                 i++;
@@ -325,24 +352,85 @@ public class Graphe {
         }
     }
 
-    private boolean estAcyclique(){
-        throw new RuntimeException("Méthode non implémentée");
+    /**pré requis :  le graphe est connexe
+     * 
+     * @return
+     */
+    public boolean estAcyclique(){
+        if(nbSommets()>2){
+            return estAcyclique( (int) mapAretes.keySet().toArray()[0], new ArrayList<>(), new Graphe(this) );
+        }
+        else{
+            return true;
+        }
     }
 
-    private boolean estUnArbre(){
+    private boolean estAcyclique(int sommetCourant, ArrayList<Integer> dejaVu, Graphe copieGraphe){
+        ArrayList<Integer> voisins = new ArrayList<>(copieGraphe.getVoisins(sommetCourant));
+        if(dejaVu.contains(sommetCourant)){
+            dejaVu.add(sommetCourant);
+            return false;
+        }
+        else if(voisins.isEmpty()){
+            dejaVu.add(sommetCourant);
+            return true;
+        }
+
+        boolean result = true;
+        int i=0;
+        dejaVu.add(sommetCourant);
+        while(i<voisins.size() && result==true){
+            copieGraphe.supprimerArete(new Arete(sommetCourant, voisins.get(i), null));
+            result = estAcyclique(voisins.get(i), dejaVu, copieGraphe);
+            i++;
+        }
+        return result; 
+    }
+
+    public boolean estUnArbre(){
         return estConnexe() && estAcyclique();
     }
 
     public boolean estUneForet() {
-        throw new RuntimeException("Méthode non implémentée");
+        Set<Set<Integer>> ensembleConnexes = getEnsembleClassesConnexite();
+        for(Set<Integer> classeConnexe : ensembleConnexes){
+            if(!(new Graphe(this, classeConnexe).estUnArbre())){
+                return false;
+            }
+        }
+        return true;
     }
 
     public Set<Integer> getClasseConnexite(int v) {
-        throw new RuntimeException("Méthode non implémentée");
+        return getClasseConnexite(v, new HashSet<Integer>());
+    }
+
+    private Set<Integer> getClasseConnexite(int sommetCourant, Set<Integer> dejaVu){
+        ArrayList<Integer> voisins = new ArrayList<>(getVoisins(sommetCourant));
+        dejaVu.add(sommetCourant);
+        if(dejaVu.containsAll(voisins)){
+            return dejaVu;
+        }
+        else{
+            for(int i : voisins){
+                if(!dejaVu.contains(i)){
+                    getClasseConnexite(i, dejaVu);
+                }
+            }
+            return dejaVu;
+        }
     }
 
     public Set<Set<Integer>> getEnsembleClassesConnexite() {
-        throw new RuntimeException("Méthode non implémentée");
+        ArrayList<Integer> listeSommet = new ArrayList<>(mapAretes.keySet());
+        Set<Set<Integer>> ensemble = new HashSet<>();
+        Set<Integer> tempo = new HashSet<>();
+        while(!listeSommet.isEmpty()){
+            tempo = getClasseConnexite(listeSommet.get(0));
+            listeSommet.removeAll(tempo);
+            ensemble.add(tempo);
+        }
+        return ensemble;
     }
 
     /**

@@ -9,7 +9,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -105,6 +108,16 @@ public class GrapheTest {
     }
 
     @Test
+    void testEstConnexe1(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(0, 1));
+        aretes.add(new Arete(1, 3));
+        aretes.add(new Arete(3, 4));
+        Graphe graphe2 = new Graphe(aretes);
+        assertTrue(graphe2.estConnexe());
+    }
+
+    @Test
     void testEstUneChaine1(){
         List<Arete> aretes = new ArrayList<>();
         aretes.add(new Arete(0, 1));
@@ -154,6 +167,19 @@ public class GrapheTest {
     }
 
     @Test
+    void testEstUneChaine7(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(0, 1));
+        aretes.add(new Arete(1, 2));
+        aretes.add(new Arete(2, 3));
+        aretes.add(new Arete(4, 5));
+        aretes.add(new Arete(5, 6));
+        aretes.add(new Arete(6, 4));
+        Graphe graphe2 = new Graphe(aretes);
+        assertFalse(graphe2.estUneChaine());
+    }
+
+    @Test
     void testEstUnCycle1(){
         Graphe graphe2 = new Graphe(0);
         assertTrue(graphe2.estUnCycle());
@@ -199,6 +225,115 @@ public class GrapheTest {
         assertFalse(graphe2.estUnCycle());
     }
 
+    @Test
+    void testEstAcyclique1(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(0, 1));
+        aretes.add(new Arete(1, 3));
+        aretes.add(new Arete(1, 4));
+        Graphe graphe2 = new Graphe(aretes);
+        assertTrue(graphe2.estAcyclique());
+    }
+
+    @Test
+    void testEstAcyclique2(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(0, 1));
+        aretes.add(new Arete(1, 3));
+        aretes.add(new Arete(1, 4));
+        aretes.add(new Arete(4, 5));
+        aretes.add(new Arete(5, 0));
+        Graphe graphe2 = new Graphe(aretes);
+        assertFalse(graphe2.estAcyclique());
+    }
+
+    @Test
+    void testEstAcyclique3(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(0, 1));
+        aretes.add(new Arete(1, 2));
+        aretes.add(new Arete(2, 0));
+        Graphe graphe2 = new Graphe(aretes);
+        assertFalse(graphe2.estAcyclique());
+    }
+
+    @Test
+    void testEstAcyclique4(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(3, 4));
+        aretes.add(new Arete(4, 5));
+        aretes.add(new Arete(5, 6));
+        Graphe graphe2 = new Graphe(aretes);
+        assertTrue(graphe2.estAcyclique());
+    }    
+
+    @Test
+    void testGetClasseConnexite(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(0, 1));
+        aretes.add(new Arete(1, 2));
+        aretes.add(new Arete(2, 0));
+
+        aretes.add(new Arete(3, 4));
+        aretes.add(new Arete(4, 5));
+        aretes.add(new Arete(5, 6));
+        Graphe graphe2 = new Graphe(aretes);
+        assertTrue(Arrays.asList(0,1,2).containsAll(graphe2.getClasseConnexite(0)) && graphe2.getClasseConnexite(0).containsAll(Arrays.asList(0,1,2)));
+        assertTrue(Arrays.asList(3,4,5,6).containsAll(graphe2.getClasseConnexite(5)) && graphe2.getClasseConnexite(5).containsAll(Arrays.asList(3,4,5,6)));
+    }
+
+    @Test
+    void testGetEnsembleClasseConnexite(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(0, 1));
+        aretes.add(new Arete(1, 2));
+        aretes.add(new Arete(2, 0));
+
+        aretes.add(new Arete(3, 4));
+        aretes.add(new Arete(4, 5));
+        aretes.add(new Arete(5, 6));
+        Graphe graphe2 = new Graphe(aretes);
+        assertEquals(graphe2.getEnsembleClassesConnexite().size(), 2);
+        assertTrue(graphe2.getEnsembleClassesConnexite().contains(new HashSet<Integer>(Arrays.asList(0,1,2))));
+        assertTrue(graphe2.getEnsembleClassesConnexite().contains(new HashSet<Integer>(Arrays.asList(3,4,5,6))));
+    }
+
+    @Test
+    void testEstUnArbre(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(3, 4));
+        aretes.add(new Arete(4, 5));
+        aretes.add(new Arete(5, 6));
+
+        Graphe graphe2 = new Graphe(aretes);
+        assertTrue(graphe2.estUnArbre());
+    }    
+
+    @Test
+    void testEstUneForet1(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(0, 1));
+        aretes.add(new Arete(1, 2));
+
+        aretes.add(new Arete(3, 4));
+        aretes.add(new Arete(4, 5));
+        aretes.add(new Arete(5, 6));
+        Graphe graphe2 = new Graphe(aretes);
+        assertTrue(graphe2.estUneForet());
+    }
+    @Test
+    void testEstUneForet2(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(0, 1));
+        aretes.add(new Arete(1, 2));
+        aretes.add(new Arete(0, 2));
+
+        aretes.add(new Arete(3, 4));
+        aretes.add(new Arete(4, 5));
+        aretes.add(new Arete(5, 6));
+        Graphe graphe2 = new Graphe(aretes);
+        assertFalse(graphe2.estUneForet());
+    }
 
     @Disabled
     @Test
