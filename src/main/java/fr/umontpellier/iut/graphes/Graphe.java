@@ -352,17 +352,20 @@ public class Graphe {
         }
     }
 
-    /**pré requis :  le graphe est connexe
-     * 
-     * @return
-     */
     public boolean estAcyclique(){
-        if(nbSommets()>2){
-            return estAcyclique( (int) mapAretes.keySet().toArray()[0], new ArrayList<>(), new Graphe(this) );
+        Set<Set<Integer>> ensembleConnexes = getEnsembleClassesConnexite();
+        boolean result = true;
+        Graphe tempo;
+        for(Set<Integer> groupe : ensembleConnexes){
+            if(groupe.size()>2){
+                tempo = new Graphe(this, groupe);
+                result = tempo.estAcyclique( (int) mapAretes.keySet().toArray()[0], new ArrayList<>(), new Graphe(this) );
+                if(result == false){
+                    return false;
+                }
+            }
         }
-        else{
-            return true;
-        }
+        return true;
     }
 
     private boolean estAcyclique(int sommetCourant, ArrayList<Integer> dejaVu, Graphe copieGraphe){
