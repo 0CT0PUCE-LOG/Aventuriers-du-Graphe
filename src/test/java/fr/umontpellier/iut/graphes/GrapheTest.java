@@ -335,6 +335,127 @@ public class GrapheTest {
         assertFalse(graphe2.estUneForet());
     }
 
+    @Test
+    void testEstUnIsthme(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(0, 1));
+        aretes.add(new Arete(1, 2));
+        aretes.add(new Arete(2, 0));
+
+        aretes.add(new Arete(3, 4));
+        Arete candidat = new Arete(4, 5);
+        aretes.add(candidat);
+        aretes.add(new Arete(5, 6));
+        Graphe graphe2 = new Graphe(aretes);
+        assertTrue(graphe2.estUnIsthme(candidat));
+    }
+
+    @Test
+    void testEstUnIsthme2(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(0, 1));
+        aretes.add(new Arete(1, 2));
+        aretes.add(new Arete(2, 0));
+
+        aretes.add(new Arete(3, 4));
+        aretes.add(new Arete(4, 5));
+        aretes.add(new Arete(5, 6));
+        Graphe graphe2 = new Graphe(aretes);
+        assertFalse(graphe2.estUnIsthme(new Arete(0, 1)));
+    }
+
+    @Test
+    void testEstUnIsthme3(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(0, 1));
+        aretes.add(new Arete(1, 2));
+        aretes.add(new Arete(2, 0));
+
+        aretes.add(new Arete(3, 4));
+        aretes.add(new Arete(4, 5));
+        aretes.add(new Arete(5, 6));
+        Graphe graphe2 = new Graphe(aretes);
+        assertFalse(graphe2.estUnIsthme(new Arete(0, 2)));
+    }
+
+    @Test
+    void testEstUnIsthme4(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(0, 1));
+        aretes.add(new Arete(1, 2));
+        aretes.add(new Arete(2, 0));
+
+        aretes.add(new Arete(3, 4));
+        aretes.add(new Arete(4, 5));
+        aretes.add(new Arete(5, 6));
+
+        aretes.add(new Arete(7,8));
+        Graphe graphe2 = new Graphe(aretes);
+        assertTrue(graphe2.estUnIsthme(new Arete(7, 8)));
+    }
+
+    @Test
+    void testSontAdjacents(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(0, 1));
+        aretes.add(new Arete(1, 2));
+        aretes.add(new Arete(2, 0));
+
+        aretes.add(new Arete(3, 4));
+        aretes.add(new Arete(4, 5));
+        aretes.add(new Arete(5, 6));
+        Graphe graphe2 = new Graphe(aretes);
+        assertTrue(graphe2.sontAdjacents(0, 1));
+        assertTrue(graphe2.sontAdjacents(1, 0));
+        assertTrue(graphe2.sontAdjacents(1, 2));
+        assertTrue(graphe2.sontAdjacents(2, 1));
+        assertTrue(graphe2.sontAdjacents(2, 0));
+        assertTrue(graphe2.sontAdjacents(0, 2));
+        assertTrue(graphe2.sontAdjacents(3, 4));
+        assertTrue(graphe2.sontAdjacents(4, 3));
+        assertTrue(graphe2.sontAdjacents(4, 5));
+        assertTrue(graphe2.sontAdjacents(5, 4));
+        assertTrue(graphe2.sontAdjacents(5, 6));
+        assertTrue(graphe2.sontAdjacents(6, 5));
+        assertFalse(graphe2.sontAdjacents(0, 3));
+        assertFalse(graphe2.sontAdjacents(3, 0));
+        assertFalse(graphe2.sontAdjacents(0, 4));
+        assertFalse(graphe2.sontAdjacents(4, 0));
+        assertFalse(graphe2.sontAdjacents(0, 5));
+        assertFalse(graphe2.sontAdjacents(5, 0));
+        assertFalse(graphe2.sontAdjacents(0, 6));
+        assertFalse(graphe2.sontAdjacents(6, 0));
+        assertFalse(graphe2.sontAdjacents(1, 3));
+        assertFalse(graphe2.sontAdjacents(3, 1));
+        assertFalse(graphe2.sontAdjacents(1, 4));
+        assertFalse(graphe2.sontAdjacents(4, 1));
+        assertFalse(graphe2.sontAdjacents(1, 5));
+    }
+
+    @Test
+    void testFusionnerSommets(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(0, 1));
+        aretes.add(new Arete(1, 2));
+        aretes.add(new Arete(2, 0));
+
+        aretes.add(new Arete(3, 4));
+        aretes.add(new Arete(4, 5));
+        aretes.add(new Arete(5, 6));
+        Graphe graphe2 = new Graphe(aretes);
+        System.out.println("avant fusion" + graphe2);
+        graphe2.fusionnerSommets(3, 2);
+        System.out.println("apres fusion" + graphe2);
+
+        assertTrue(graphe2.sontAdjacents(0, 1));
+        assertTrue(graphe2.sontAdjacents(1, 0));
+        assertTrue(graphe2.sontAdjacents(1, 2));
+        assertTrue(graphe2.sontAdjacents(2, 1));
+        assertTrue(graphe2.sontAdjacents(2, 0));
+        assertTrue(graphe2.sontAdjacents(0, 2));
+        assertTrue(graphe2.sontAdjacents(2, 4));
+    }
+
     @Disabled
     @Test
     void testGetVoisins() {

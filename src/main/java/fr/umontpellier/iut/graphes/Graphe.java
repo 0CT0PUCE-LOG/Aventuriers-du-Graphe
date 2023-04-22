@@ -441,12 +441,15 @@ public class Graphe {
      */
     public boolean estUnIsthme(Arete a) {
         Graphe copieGraphe = new Graphe(this);
+        int nbEnsembleConnexe = copieGraphe.getEnsembleClassesConnexite().size();
         copieGraphe.supprimerArete(a);
-        return !copieGraphe.estConnexe();
+        int nbEnsembleConnexeApres = copieGraphe.getEnsembleClassesConnexite().size();
+        return !copieGraphe.estConnexe() && nbEnsembleConnexeApres > nbEnsembleConnexe;
     }
 
     public boolean sontAdjacents(int i, int j) {
-        throw new RuntimeException("Méthode non implémentée");
+        ArrayList<Integer> voisins = new ArrayList<>(getVoisins(i));
+        return voisins.contains(j);
     }
 
     /**
@@ -457,7 +460,18 @@ public class Graphe {
      * Si un des sommets n'est pas présent dans le graphe, alors cette fonction ne fait rien.
      */
     public void fusionnerSommets(int i, int j) {
-        throw new RuntimeException("Méthode non implémentée");
+        if(contientSommet(i) && contientSommet(j)){
+            int min = Math.min(i, j);
+            int max = Math.max(i, j);
+            ArrayList<Integer> voisins = new ArrayList<>(getVoisins(max));
+            for(int v : voisins){
+                if(v!=min){
+                    supprimerArete(new Arete(max, v, null));
+                    ajouterArete(new Arete(min, v, null));
+                }
+            }
+            supprimerSommet(max);
+        }
     }
 
     /**
@@ -465,7 +479,12 @@ public class Graphe {
      * La pondération des arêtes devrait être ignorée.
      */
     public static boolean sequenceEstGraphe(List<Integer> sequence) {
-        throw new RuntimeException("Méthode non implémentée");
+        boolean estGraphe = true;
+        for(int i=0; i<sequence.size(); i++){
+            if( sequence.get(0)%2==0 ){
+
+            }
+        }
     }
 
     /**
