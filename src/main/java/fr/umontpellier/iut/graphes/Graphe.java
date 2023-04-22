@@ -479,17 +479,64 @@ public class Graphe {
      * La pondération des arêtes devrait être ignorée.
      */
     public static boolean sequenceEstGraphe(List<Integer> sequence) {
-        boolean estGraphe = true;
+        List<Integer> sequence_copy = sequence;
+        boolean estGraphe = false;
         int compteur = 0;
-        for(int i=0; i<sequence.size(); i++){
-            if( sequence.get(0)%2!=0 ){
+        for(int i=0; i<sequence_copy.size(); i++){
+            if( sequence_copy.get(0)%2!=0 ){
                 compteur++;
             }
         }
-        if(compteur%2 != 0){
-            estGraphe = false;
+        if(compteur%2 == 0){
+            ordonnerSequence(sequence_copy);
+            System.out.println("sequence"+sequence_copy);
+            int b = sequence_copy.get(sequence_copy.size()-1);
+            if(b >= sequence_copy.size()-1){
+                estGraphe = false;
+            }
+            else{
+                sequence_copy.set(sequence_copy.size()-1, 0);
+                int k=2;
+                while(b != 0){
+                    sequence_copy.set(sequence_copy.size() - k, sequence_copy.get(sequence_copy.size() - k)-1);
+                    b--;
+                    k++;
+                }
+                //vérifier si tout les éléments de la liste sont des 0
+                estGraphe = true;
+                boolean fini = false;
+                boolean fusible;
+                while(!fini){
+                    fusible = true;
+                    //vérifier si il n'y a que des 0
+                    for(int i=0; i<sequence_copy.size(); i++){
+                        if(sequence_copy.get(i) != 0){
+                            fusible = false;
+                            estGraphe = true;
+                        }
+                    }
+                    //vérifier si il reste un 1
+                    for(int i=0; i<sequence_copy.size()-1; i++){
+                        if(sequence_copy.get(i) != 0 && sequence_copy.get(sequence.size()-1) == 1){
+                            fusible = false;
+                            estGraphe = true;
+                        }
+                    }
+                    if(!estGraphe){
+                        sequenceEstGraphe(sequence_copy);
+                    }
+                    if(fusible = false){
+                        fini=true;
+                    }
+                }
+            }
         }
         return estGraphe;
+    }
+
+    public static List<Integer> ordonnerSequence(List<Integer> sequence){
+        Collections.sort(sequence);
+        return sequence;
     }
 
     /**

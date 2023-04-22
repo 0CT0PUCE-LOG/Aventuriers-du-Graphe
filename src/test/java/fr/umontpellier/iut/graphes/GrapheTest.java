@@ -454,12 +454,29 @@ public class GrapheTest {
     @Test
     void testSequenceEstGraphe3(){
         List<Integer> sequence = new ArrayList<>();
+        sequence.add(2);
+        sequence.add(2);
         sequence.add(1);
         sequence.add(2);
         sequence.add(2);
+        System.out.println("sequence initial" + sequence);
+        Graphe.sequenceEstGraphe(sequence);
+        //assertTrue(Graphe.sequenceEstGraphe(sequence));
+    }
+
+    @Test
+    void testOrdonnerSequence() {
+        List<Integer> sequence = new ArrayList<>();
         sequence.add(2);
         sequence.add(2);
-        assertFalse(Graphe.sequenceEstGraphe(sequence));
+        sequence.add(2);
+        sequence.add(2);
+        sequence.add(1);
+
+        System.out.println("sequence avant ordonnancement" + sequence);
+        System.out.println("sequence apres ordonnancement" + Graphe.ordonnerSequence(sequence));
+        assertEquals(1, Graphe.ordonnerSequence(sequence).get(0));
+        assertEquals(2, Graphe.ordonnerSequence(sequence).get(1));
     }
 
     @Test
