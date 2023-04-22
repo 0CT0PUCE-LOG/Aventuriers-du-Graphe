@@ -441,10 +441,8 @@ public class Graphe {
      */
     public boolean estUnIsthme(Arete a) {
         Graphe copieGraphe = new Graphe(this);
-        int nbEnsembleConnexe = copieGraphe.getEnsembleClassesConnexite().size();
         copieGraphe.supprimerArete(a);
-        int nbEnsembleConnexeApres = copieGraphe.getEnsembleClassesConnexite().size();
-        return !copieGraphe.estConnexe() && nbEnsembleConnexeApres > nbEnsembleConnexe;
+        return !copieGraphe.getClasseConnexite(a.i()).contains(a.j());
     }
 
     public boolean sontAdjacents(int i, int j) {

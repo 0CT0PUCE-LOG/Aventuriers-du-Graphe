@@ -536,7 +536,7 @@ public class GrapheTest {
         aretes2.add(new Arete(8, 10));
         aretes2.add(new Arete(9, 10));
         Graphe graphe2 = new Graphe(aretes);
-        Graphe graphe3 = new Graphe(aretes);
+        Graphe graphe3 = new Graphe(aretes2);
         assertTrue(Graphe.sontIsomorphes(graphe2, graphe3));
     }
 
