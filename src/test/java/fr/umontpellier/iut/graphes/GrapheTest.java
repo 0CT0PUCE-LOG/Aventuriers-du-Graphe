@@ -486,6 +486,43 @@ public class GrapheTest {
         assertTrue(graphe2.sontAdjacents(2, 4));
     }
 
+    @Test
+    void testSontIsomorphes(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(0, 1));
+        aretes.add(new Arete(1, 2));
+        aretes.add(new Arete(2, 0));
+
+        aretes.add(new Arete(3, 4));
+        aretes.add(new Arete(4, 5));
+        aretes.add(new Arete(5, 6));
+        Graphe graphe2 = new Graphe(aretes);
+        assertTrue(Graphe.sontIsomorphes(graphe2, graphe2));
+    }
+
+    @Test
+    void testSontIsomorphes2(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(1, 2));
+        aretes.add(new Arete(1, 3));
+        aretes.add(new Arete(2, 3));
+        aretes.add(new Arete(2, 4));
+        aretes.add(new Arete(3, 5));
+        aretes.add(new Arete(4, 5));
+
+
+        List<Arete> aretes2 = new ArrayList<>();
+        aretes2.add(new Arete(6, 7));
+        aretes2.add(new Arete(6, 8));
+        aretes2.add(new Arete(7, 8));
+        aretes2.add(new Arete(7, 9));
+        aretes2.add(new Arete(8, 10));
+        aretes2.add(new Arete(9, 10));
+        Graphe graphe2 = new Graphe(aretes);
+        Graphe graphe3 = new Graphe(aretes);
+        assertTrue(Graphe.sontIsomorphes(graphe2, graphe3));
+    }
+
     @Disabled
     @Test
     void testGetVoisins() {

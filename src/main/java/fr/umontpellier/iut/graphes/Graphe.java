@@ -493,11 +493,11 @@ public class Graphe {
     }
 
     /**
-     * @return true si et seulement si la séquence d'entiers passée en paramètre correspond à un graphe valide.
-     * La pondération des arêtes devrait être ignorée.
+     * @return true si les deux graphes passés en paramètre sont isomorphes.
+     * pré-requis : les deux graphes sont des graphes simples.
      */
     public static boolean sontIsomorphes(Graphe g1, Graphe g2) {
-        throw new RuntimeException("Méthode non implémentée");
+        return g1.nbAretes() == g2.nbAretes() && g1.nbSommets() == g1.nbSommets() && g1.ensembleSommets().containsAll(g2.ensembleSommets()) && g2.ensembleSommets().containsAll(g1.ensembleSommets());
     }
 
     /**
