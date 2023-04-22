@@ -433,6 +433,36 @@ public class GrapheTest {
     }
 
     @Test
+    void testSequenceEstGraphe(){
+        List<Integer> sequence = new ArrayList<>();
+        sequence.add(2);
+        sequence.add(2);
+        sequence.add(2);
+        assertTrue(Graphe.sequenceEstGraphe(sequence));
+    }
+
+    @Test
+    void testSequenceEstGraphe2(){
+        List<Integer> sequence = new ArrayList<>();
+        sequence.add(2);
+        sequence.add(2);
+        sequence.add(2);
+        sequence.add(2);
+        assertTrue(Graphe.sequenceEstGraphe(sequence));
+    }
+
+    @Test
+    void testSequenceEstGraphe3(){
+        List<Integer> sequence = new ArrayList<>();
+        sequence.add(1);
+        sequence.add(2);
+        sequence.add(2);
+        sequence.add(2);
+        sequence.add(2);
+        assertFalse(Graphe.sequenceEstGraphe(sequence));
+    }
+
+    @Test
     void testFusionnerSommets(){
         List<Arete> aretes = new ArrayList<>();
         aretes.add(new Arete(0, 1));

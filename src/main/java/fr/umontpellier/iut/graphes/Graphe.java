@@ -480,11 +480,16 @@ public class Graphe {
      */
     public static boolean sequenceEstGraphe(List<Integer> sequence) {
         boolean estGraphe = true;
+        int compteur = 0;
         for(int i=0; i<sequence.size(); i++){
-            if( sequence.get(0)%2==0 ){
-
+            if( sequence.get(0)%2!=0 ){
+                compteur++;
             }
         }
+        if(compteur%2 != 0){
+            estGraphe = false;
+        }
+        return estGraphe;
     }
 
     /**
