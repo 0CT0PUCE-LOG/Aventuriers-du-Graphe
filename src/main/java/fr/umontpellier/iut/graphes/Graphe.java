@@ -489,7 +489,7 @@ public class Graphe {
         }
         if(compteur%2 == 0){
             ordonnerSequence(sequence_copy);
-            System.out.println("sequence"+sequence_copy);
+            System.out.println("sequence ordonne :"+sequence_copy);
             int b = sequence_copy.get(sequence_copy.size()-1);
             if(b >= sequence_copy.size()-1){
                 estGraphe = false;
@@ -503,29 +503,40 @@ public class Graphe {
                     k++;
                 }
                 //vérifier si tout les éléments de la liste sont des 0
-                estGraphe = true;
+                //estGraphe = true;
                 boolean fini = false;
-                boolean fusible;
+                boolean good;
                 while(!fini){
-                    fusible = true;
                     //vérifier si il n'y a que des 0
+                    good = true;
                     for(int i=0; i<sequence_copy.size(); i++){
                         if(sequence_copy.get(i) != 0){
+                            System.out.println("P1 : GRAPHE PAS POSSIBLE CAR : "+sequence_copy.get(i));
+                            good = false;
+                        }
+                        /*
+                        if(sequence_copy.get(i) != 0){
+                            System.out.println("GRAPHE POSSIBLE");
                             fusible = false;
                             estGraphe = true;
                         }
+                         */
                     }
                     //vérifier si il reste un 1
-                    for(int i=0; i<sequence_copy.size()-1; i++){
-                        if(sequence_copy.get(i) != 0 && sequence_copy.get(sequence.size()-1) == 1){
-                            fusible = false;
-                            estGraphe = true;
+                    if(sequence_copy.get(sequence_copy.size()-1) == 1){
+                        for(int y=0; y<sequence_copy.size()-2; y++){
+                            if(sequence_copy.get(y) != 0){
+                                System.out.println("P2 : GRAPHE PAS POSSIBLE CAR : "+sequence_copy.get(y));
+                                good = false;
+                            }
                         }
                     }
                     if(!estGraphe){
+                        System.out.println("sequence : "+sequence_copy);
+                        System.out.println("----------------RECURSIF-----------------");
                         sequenceEstGraphe(sequence_copy);
                     }
-                    if(fusible = false){
+                    if(good == true){
                         fini=true;
                     }
                 }
