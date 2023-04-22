@@ -440,7 +440,9 @@ public class Graphe {
      * @return true si et seulement si l'arête passée en paramètre est un isthme dans le graphe.
      */
     public boolean estUnIsthme(Arete a) {
-        throw new RuntimeException("Méthode non implémentée");
+        Graphe copieGraphe = new Graphe(this);
+        copieGraphe.supprimerArete(a);
+        return !copieGraphe.estConnexe();
     }
 
     public boolean sontAdjacents(int i, int j) {
