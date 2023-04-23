@@ -538,7 +538,33 @@ public class Graphe {
      * pré-requis : les deux graphes sont des graphes simples.
      */
     public static boolean sontIsomorphes(Graphe g1, Graphe g2) {
+        if(g1.getSequenceDegre() == g2.getSequenceDegre()){
+            if(g1.nbAretes() == g2.nbAretes()){
+                List<Integer> sequence1 = g1.getSequenceDegre();
+                List<Integer> sequence2 = g2.getSequenceDegre();
+                Set<Integer> sommets1 = g1.ensembleSommets();
+                Set<Integer> sommets2 = g2.ensembleSommets();
+                Map<Integer, Integer> bijection = new HashMap<>();
+                for(int i=0; i<sequence1.size(); i++){
+                    if(Objects.equals(sequence1.get(i), sequence2.get(i))){
+                        bijection.put(sequence1.get(i), sequence2.get(i));
+                    }
+                }
+                System.out.println("bijection" + bijection);
+
+            }
+        }
+
+
         return g1.nbAretes() == g2.nbAretes() && g1.nbSommets() == g1.nbSommets() && g1.ensembleSommets().containsAll(g2.ensembleSommets()) && g2.ensembleSommets().containsAll(g1.ensembleSommets());
+    }
+
+    public List<Integer> getSequenceDegre(){
+        List<Integer> sequence = new ArrayList<>();
+        for(int i=0; i<this.nbSommets(); i++){
+            sequence.add(this.getVoisins(i).size());
+        }
+        return ordonnerSequence(sequence);
     }
 
     /**

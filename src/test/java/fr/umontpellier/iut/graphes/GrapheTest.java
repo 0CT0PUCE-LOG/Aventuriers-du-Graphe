@@ -605,6 +605,49 @@ public class GrapheTest {
         assertTrue(Graphe.sontIsomorphes(graphe2, graphe3));
     }
 
+    @Test
+    void testGetSequenceDegre(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(0, 1));
+        aretes.add(new Arete(1, 2));
+        aretes.add(new Arete(2, 0));
+        aretes.add(new Arete(3, 4));
+        aretes.add(new Arete(4, 5));
+        aretes.add(new Arete(5, 6));
+        Graphe graphe2 = new Graphe(aretes);
+        assertEquals(1, graphe2.getSequenceDegre().get(0));
+        assertEquals(1, graphe2.getSequenceDegre().get(1));
+        assertEquals(2, graphe2.getSequenceDegre().get(2));
+        assertEquals(2, graphe2.getSequenceDegre().get(3));
+        assertEquals(2, graphe2.getSequenceDegre().get(4));
+        assertEquals(2, graphe2.getSequenceDegre().get(5));
+        assertEquals(2, graphe2.getSequenceDegre().get(6));
+    }
+
+    @Test
+    void testGetSequenceDegre2(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(1, 2));
+        aretes.add(new Arete(1, 3));
+        aretes.add(new Arete(2, 3));
+        aretes.add(new Arete(2, 4));
+        aretes.add(new Arete(3, 5));
+        aretes.add(new Arete(4, 5));
+
+
+        List<Arete> aretes2 = new ArrayList<>();
+        aretes2.add(new Arete(6, 7));
+        aretes2.add(new Arete(6, 8));
+        aretes2.add(new Arete(7, 8));
+        aretes2.add(new Arete(7, 9));
+        aretes2.add(new Arete(8, 10));
+        aretes2.add(new Arete(9, 10));
+        Graphe graphe2 = new Graphe(aretes);
+        Graphe graphe3 = new Graphe(aretes2);
+        System.out.println(graphe2.getSequenceDegre());
+        System.out.println(graphe3.getSequenceDegre());
+    }
+
     @Disabled
     @Test
     void testGetVoisins() {
