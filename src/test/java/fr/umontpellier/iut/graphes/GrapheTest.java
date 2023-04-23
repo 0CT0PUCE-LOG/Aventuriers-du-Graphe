@@ -459,9 +459,74 @@ public class GrapheTest {
         sequence.add(2);
         sequence.add(2);
         sequence.add(2);
-        System.out.println("sequence initial" + sequence);
-        System.out.println(Graphe.sequenceEstGraphe(sequence));
-        //assertTrue(Graphe.sequenceEstGraphe(sequence));
+        assertTrue(Graphe.sequenceEstGraphe(sequence));
+    }
+
+    @Test
+    void testSequenceEstGraphe4(){
+        List<Integer> sequence = new ArrayList<>();
+        sequence.add(2);
+        sequence.add(2);
+        sequence.add(2);
+        sequence.add(2);
+        sequence.add(1);
+        assertFalse(Graphe.sequenceEstGraphe(sequence));
+    }
+
+    @Test
+    void testSequenceEstGraphe5(){
+        List<Integer> sequence = new ArrayList<>();
+        sequence.add(1);
+        sequence.add(2);
+        sequence.add(3);
+        sequence.add(4);
+        sequence.add(5);
+        assertFalse(Graphe.sequenceEstGraphe(sequence));
+    }
+
+    @Test
+    void testSequenceEstGraphe6(){
+        List<Integer> sequence = new ArrayList<>();
+        sequence.add(0);
+        sequence.add(1);
+        sequence.add(2);
+        sequence.add(3);
+        sequence.add(4);
+        assertFalse(Graphe.sequenceEstGraphe(sequence));
+    }
+
+    @Test
+    void testSequenceEstGraphe7(){
+        List<Integer> sequence = new ArrayList<>();
+        sequence.add(1);
+        sequence.add(2);
+        sequence.add(3);
+        sequence.add(4);
+        sequence.add(4);
+        assertFalse(Graphe.sequenceEstGraphe(sequence));
+    }
+
+    @Test
+    void testSequenceEstGraphe8() {
+        List<Integer> sequence = new ArrayList<>();
+        sequence.add(2);
+        sequence.add(2);
+        sequence.add(3);
+        sequence.add(3);
+        sequence.add(4);
+        assertFalse(Graphe.sequenceEstGraphe(sequence));
+    }
+
+    @Test
+    void testSequenceEstGraphe9() {
+        List<Integer> sequence = new ArrayList<>();
+        sequence.add(1);
+        sequence.add(1);
+        sequence.add(2);
+        sequence.add(2);
+        sequence.add(2);
+        sequence.add(3);
+        assertFalse(Graphe.sequenceEstGraphe(sequence));
     }
 
     @Test
