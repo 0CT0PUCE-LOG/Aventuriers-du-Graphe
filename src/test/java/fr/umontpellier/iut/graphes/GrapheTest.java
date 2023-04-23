@@ -456,11 +456,11 @@ public class GrapheTest {
         List<Integer> sequence = new ArrayList<>();
         sequence.add(2);
         sequence.add(2);
-        sequence.add(1);
+        sequence.add(2);
         sequence.add(2);
         sequence.add(2);
         System.out.println("sequence initial" + sequence);
-        Graphe.sequenceEstGraphe(sequence);
+        System.out.println(Graphe.sequenceEstGraphe(sequence));
         //assertTrue(Graphe.sequenceEstGraphe(sequence));
     }
 

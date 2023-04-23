@@ -477,70 +477,55 @@ public class Graphe {
      * La pondération des arêtes devrait être ignorée.
      */
     public static boolean sequenceEstGraphe(List<Integer> sequence) {
-        List<Integer> sequence_copy = sequence;
-        boolean estGraphe = false;
+        List<Integer> sequence_copy = ordonnerSequence(sequence);
+        boolean estGraphe;
+        //vérifier si il y a un nombre de sommet de degre impair
         int compteur = 0;
+        int compteur2 = 0;
         for(int i=0; i<sequence_copy.size(); i++){
-            if( sequence_copy.get(0)%2!=0 ){
+            if( sequence_copy.get(i)%2!=0 ){
                 compteur++;
             }
         }
+        System.out.println("nb de sommets impairs" + compteur);
+        System.out.println("sequence avant modifications" + sequence_copy);
         if(compteur%2 == 0){
-            ordonnerSequence(sequence_copy);
-            System.out.println("sequence ordonne :"+sequence_copy);
+            //vérifier si il ne reste que des sommets de degre 0
             int b = sequence_copy.get(sequence_copy.size()-1);
             if(b >= sequence_copy.size()-1){
-                estGraphe = false;
+                return false;
             }
             else{
                 sequence_copy.set(sequence_copy.size()-1, 0);
-                int k=2;
-                while(b != 0){
-                    sequence_copy.set(sequence_copy.size() - k, sequence_copy.get(sequence_copy.size() - k)-1);
+                System.out.println("sequence pendant modifications" + sequence_copy);
+                int y = sequence_copy.size()-2;
+                while(b>0){
+                    System.out.println("replacing :" + sequence_copy.get(y) + " at i:"+ (y) + " by " + (sequence_copy.get(y) - 1));
+                    sequence_copy.set(y, sequence_copy.get(y) - 1);
                     b--;
-                    k++;
+                    y--;
                 }
-                //vérifier si tout les éléments de la liste sont des 0
-                //estGraphe = true;
-                boolean fini = false;
-                boolean good;
-                while(!fini){
-                    //vérifier si il n'y a que des 0
-                    good = true;
-                    for(int i=0; i<sequence_copy.size(); i++){
-                        if(sequence_copy.get(i) != 0){
-                            System.out.println("P1 : GRAPHE PAS POSSIBLE CAR : "+sequence_copy.get(i));
-                            good = false;
-                        }
-                        /*
-                        if(sequence_copy.get(i) != 0){
-                            System.out.println("GRAPHE POSSIBLE");
-                            fusible = false;
-                            estGraphe = true;
-                        }
-                         */
+                sequence_copy = ordonnerSequence(sequence_copy);
+                System.out.println("sequence apres modifications" + sequence_copy);
+                //vérifier si il ne reste que des 0 dans la sequence
+                for(int i=0; i<sequence_copy.size(); i++){
+                    if( sequence_copy.get(i) == 0 ){
+                        compteur2++;
                     }
-                    //vérifier si il reste un 1
-                    if(sequence_copy.get(sequence_copy.size()-1) == 1){
-                        for(int y=0; y<sequence_copy.size()-2; y++){
-                            if(sequence_copy.get(y) != 0){
-                                System.out.println("P2 : GRAPHE PAS POSSIBLE CAR : "+sequence_copy.get(y));
-                                good = false;
-                            }
-                        }
-                    }
-                    if(!estGraphe){
-                        System.out.println("sequence : "+sequence_copy);
-                        System.out.println("----------------RECURSIF-----------------");
-                        sequenceEstGraphe(sequence_copy);
-                    }
-                    if(good == true){
-                        fini=true;
-                    }
+                }
+                if(compteur2 == sequence_copy.size()){
+                    return true;
+                }
+                else{
+                    sequenceEstGraphe(sequence_copy);
                 }
             }
         }
-        return estGraphe;
+        else{
+            return false;
+        }
+        System.out.println("sequence finale" + sequence_copy);
+        return true;
     }
 
     public static List<Integer> ordonnerSequence(List<Integer> sequence){
