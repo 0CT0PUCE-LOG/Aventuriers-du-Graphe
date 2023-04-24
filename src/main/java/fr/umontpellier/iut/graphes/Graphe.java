@@ -480,9 +480,9 @@ public class Graphe {
      * @return true si et seulement si la séquence d'entiers passée en paramètre correspond à un graphe simple valide.
      * La pondération des arêtes devrait être ignorée.
      */
-    public static boolean sequenceEstGraphe(List<Integer> sequence) {
+    public static boolean sequenceEstGraphe2(List<Integer> sequence) {
         List<Integer> sequence_copy = ordonnerSequence(sequence);
-        boolean estGraphe;
+        boolean estGraphe = false;
         //vérifier si il y a un nombre de sommet de degre impair
         int compteur = 0;
         int compteur2 = 0;
@@ -496,18 +496,27 @@ public class Graphe {
         if(compteur%2 == 0){
             //vérifier si il ne reste que des sommets de degre 0
             int b = sequence_copy.get(sequence_copy.size()-1);
-            if(b >= sequence_copy.size()-1){
-                return false;
+            if(b > sequence_copy.size()-1){
+                System.out.println("b >= sequence_copy.size()-1");
+                estGraphe = false;
+                return estGraphe;
             }
             else{
                 sequence_copy.set(sequence_copy.size()-1, 0);
                 System.out.println("sequence pendant modifications" + sequence_copy);
                 int y = sequence_copy.size()-2;
                 while(b>0){
-                    System.out.println("replacing :" + sequence_copy.get(y) + " at i:"+ (y) + " by " + (sequence_copy.get(y) - 1));
-                    sequence_copy.set(y, sequence_copy.get(y) - 1);
-                    b--;
-                    y--;
+                    if(sequence_copy.get(y) != 0){
+                        System.out.println("replacing :" + sequence_copy.get(y) + " at i:"+ (y) + " by " + (sequence_copy.get(y) - 1));
+                        sequence_copy.set(y, sequence_copy.get(y) - 1);
+                        b--;
+                        y--;
+                    }
+                    else{
+                        System.out.println("b>0 mais sequence_copy.get(y) == 0 BIS");
+                        estGraphe = false;
+                        return estGraphe;
+                    }
                 }
                 sequence_copy = ordonnerSequence(sequence_copy);
                 System.out.println("sequence apres modifications" + sequence_copy);
@@ -518,19 +527,58 @@ public class Graphe {
                     }
                 }
                 if(compteur2 == sequence_copy.size()){
-                    return true;
+                    estGraphe = true;
+                    return estGraphe;
                 }
                 else{
                     sequenceEstGraphe(sequence_copy);
                 }
             }
         }
-        else{
+        System.out.println("sequence finale" + sequence_copy);
+        return estGraphe;
+    }
+
+    public static boolean sequenceEstGraphe(List<Integer> sequence){
+        int n = sequence.size();
+        if(n == 0){
             return false;
         }
-        System.out.println("sequence finale" + sequence_copy);
+        sequence = ordonnerSequence(sequence);
+        int sum = 0;
+        for(int i=0; i<n; i++){
+            int degree = sequence.get(i);
+            if( degree >= n){
+                //degree < 1 ||
+                return false;
+            }
+            if(i < n-1 && degree < sequence.get(i+1)){
+                return false;
+            }
+            sum += degree;
+        }
+        if(n > 1 && sequence.get(n-1) == 1 && sum < 2*(n-1)){
+            return false;
+        }
+        if(n > 1 && sequence.get(n-1) > n-1){
+            return false;
+        }
+        if(n > 1 && sequence.get(n-1) == n-1 && sum % 2 == 1){
+            return false;
+        }
         return true;
     }
+
+
+
+
+
+
+
+
+
+
+
 
     public static List<Integer> ordonnerSequence(List<Integer> sequence){
         Collections.sort(sequence);
