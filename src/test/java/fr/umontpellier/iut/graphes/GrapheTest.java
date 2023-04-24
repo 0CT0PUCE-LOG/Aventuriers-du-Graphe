@@ -573,11 +573,9 @@ public class GrapheTest {
         List<Arete> aretes = new ArrayList<>();
         aretes.add(new Arete(0, 1));
         aretes.add(new Arete(1, 2));
-        aretes.add(new Arete(2, 0));
-
         aretes.add(new Arete(3, 4));
-        aretes.add(new Arete(4, 5));
         aretes.add(new Arete(5, 6));
+
         Graphe graphe2 = new Graphe(aretes);
         assertTrue(Graphe.sontIsomorphes(graphe2, graphe2));
     }
@@ -603,6 +601,28 @@ public class GrapheTest {
         Graphe graphe2 = new Graphe(aretes);
         Graphe graphe3 = new Graphe(aretes2);
         assertTrue(Graphe.sontIsomorphes(graphe2, graphe3));
+    }
+
+    @Test
+    void testSontIsomorphes3(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(1, 2));
+        aretes.add(new Arete(2, 3));
+        aretes.add(new Arete(3, 4));
+        aretes.add(new Arete(3, 5));
+        aretes.add(new Arete(5, 4));
+
+
+        List<Arete> aretes2 = new ArrayList<>();
+        aretes2.add(new Arete(1, 2));
+        aretes2.add(new Arete(2, 3));
+        aretes2.add(new Arete(3, 4));
+        aretes2.add(new Arete(2, 5));
+        aretes2.add(new Arete(5, 4));
+
+        Graphe graphe2 = new Graphe(aretes);
+        Graphe graphe3 = new Graphe(aretes2);
+        assertFalse(Graphe.sontIsomorphes(graphe2, graphe3));
     }
 
     @Test

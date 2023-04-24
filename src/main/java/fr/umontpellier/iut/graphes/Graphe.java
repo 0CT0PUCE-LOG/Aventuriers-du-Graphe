@@ -3,6 +3,8 @@ package fr.umontpellier.iut.graphes;
 import java.lang.reflect.Array;
 import java.util.*;
 
+import fr.umontpellier.iut.rails.Route;
+
 /**
  * (Multi) Graphe non-orienté pondéré. Le poids de chaque arête correspond à la longueur de la route correspondante.
  * Pour une paire de sommets fixée {i,j}, il est possible d'avoir plusieurs arêtes
@@ -538,31 +540,87 @@ public class Graphe {
      * pré-requis : les deux graphes sont des graphes simples.
      */
     public static boolean sontIsomorphes(Graphe g1, Graphe g2) {
-        if(g1.getSequenceDegre() == g2.getSequenceDegre()){
-            if(g1.nbAretes() == g2.nbAretes()){
-                List<Integer> sequence1 = g1.getSequenceDegre();
-                List<Integer> sequence2 = g2.getSequenceDegre();
-                Set<Integer> sommets1 = g1.ensembleSommets();
-                Set<Integer> sommets2 = g2.ensembleSommets();
-                Map<Integer, Integer> bijection = new HashMap<>();
-                for(int i=0; i<sequence1.size(); i++){
-                    if(Objects.equals(sequence1.get(i), sequence2.get(i))){
-                        bijection.put(sequence1.get(i), sequence2.get(i));
+        List<Integer> sequence1 = g1.getSequenceDegre();
+        List<Integer> sequence2 = g2.getSequenceDegre();
+        if(sequence1.equals(sequence2)){
+            HashMap<Integer, List<Integer>> bijections = new HashMap<>();
+            HashMap<Integer, Integer> compteurBijections = new HashMap<>();
+            boolean fini = false;
+            //-créations des différentes bijections possibles-
+            for (Integer i : g1.mapAretes.keySet()) {
+                bijections.put(i, new ArrayList<Integer>());
+                for (Integer j : g2.mapAretes.keySet()) {
+                    if(g1.degre(i) == g2.degre(j)){
+                        bijections.get(i).add(j);
                     }
                 }
-                System.out.println("bijection" + bijection);
+                compteurBijections.put(i, 0);
+            }
+            //------------------------------------------------
+            while(!fini){
+                if(bijectionEstIsomorphe(g1, g2, bijections, compteurBijections)){
+                    return true;
+                }
+                do{
+                    fini = !incrementeCompteurBijection(bijections, compteurBijections);
+                }while(!bijectionEstValide(bijections, compteurBijections) && !fini);
+                
+            }
+            return false;    
+        }
+        else{
+            return false;
+        }
+    }    
 
+    private static boolean bijectionEstIsomorphe(Graphe g1, Graphe g2, Map<Integer, List<Integer>> bijection, Map<Integer, Integer> compteurBijection){
+        Set<Integer> voisins = new HashSet<>();
+        for (Integer i : g1.mapAretes.keySet()) {
+            voisins = g1.getVoisins(i);
+            for (Integer v : voisins) {
+                if(!g2.existeArete(new Arete(bijection.get(i).get(compteurBijection.get(i)), bijection.get(v).get(compteurBijection.get(v)), null))){
+                    return false;
+                }
+            }
+            
+        }    
+        return true;
+    }
+    
+    private static boolean incrementeCompteurBijection(Map<Integer, List<Integer>> bijection, Map<Integer, Integer> compteurBijection){
+        List<Integer> sommets = new ArrayList<>(bijection.keySet());
+        for (int i = 0; i< sommets.size(); i++) {
+            if(compteurBijection.get(sommets.get(i)) < bijection.get(sommets.get(i)).size()-1){
+                compteurBijection.put(sommets.get(i), compteurBijection.get(sommets.get(i))+1);
+                return true;
+            }
+            else if(i!= sommets.size()-1){
+                for (int j = 0; j<= i; j++) {
+                    compteurBijection.put(sommets.get(i), 0);
+                }    
             }
         }
+        return false;
+    }
 
-
-        return g1.nbAretes() == g2.nbAretes() && g1.nbSommets() == g1.nbSommets() && g1.ensembleSommets().containsAll(g2.ensembleSommets()) && g2.ensembleSommets().containsAll(g1.ensembleSommets());
+    private static boolean bijectionEstValide(Map<Integer, List<Integer>> bijection, Map<Integer, Integer> compteurBijection){
+        Set<Integer> dejaVu = new HashSet<>();
+        for(Integer i : bijection.keySet()){
+            if(dejaVu.contains(bijection.get(i).get(compteurBijection.get(i)))){
+                return false;
+            }
+            else{
+                dejaVu.add(bijection.get(i).get(compteurBijection.get(i)));
+            }
+            
+        }
+        return true;
     }
 
     public List<Integer> getSequenceDegre(){
         List<Integer> sequence = new ArrayList<>();
-        for(int i=0; i<this.nbSommets(); i++){
-            sequence.add(this.getVoisins(i).size());
+        for(Integer i : mapAretes.keySet()){
+            sequence.add(degre(i));
         }
         return ordonnerSequence(sequence);
     }
