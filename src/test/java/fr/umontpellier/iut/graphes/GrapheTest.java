@@ -530,6 +530,16 @@ public class GrapheTest {
     }
 
     @Test
+    void testSequenceEstGraphe10() {
+        List<Integer> sequence = new ArrayList<>();
+        sequence.add(0);
+        sequence.add(1);
+        sequence.add(1);
+        sequence.add(2);
+        assertTrue(Graphe.sequenceEstGraphe(sequence));
+    }
+
+    @Test
     void testOrdonnerSequence() {
         List<Integer> sequence = new ArrayList<>();
         sequence.add(2);
