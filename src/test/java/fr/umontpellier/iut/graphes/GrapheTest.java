@@ -13,6 +13,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,6 +30,19 @@ public class GrapheTest {
         aretes.add(new Arete(2, 3));
         aretes.add(new Arete(8, 42));
         graphe = new Graphe(aretes);
+    }
+
+    private boolean collectionsDansLeMemeOrdre(Iterable<Integer> listeAttendue, Iterable<Integer> listeObtenue) {
+        Iterator<Integer> it1 = listeAttendue.iterator();
+        Iterator<Integer> it2 = listeObtenue.iterator();
+        while (it1.hasNext() && it2.hasNext()) {
+            int elem1 = it1.next();
+            int elem2 = it2.next();
+            if (elem1 != elem2) {
+                return false;
+            }
+        }
+        return !it1.hasNext() && !it2.hasNext();
     }
 
     @Test
@@ -668,6 +682,24 @@ public class GrapheTest {
         System.out.println(graphe3.getSequenceDegre());
     }
 
+    @Test
+    void testparcoursSansRepetition1(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(1, 2));
+        aretes.add(new Arete(1, 3));
+        aretes.add(new Arete(2, 3));
+        aretes.add(new Arete(2, 4));
+        aretes.add(new Arete(3, 5));
+        aretes.add(new Arete(4, 5));
+        Graphe graphe2 = new Graphe(aretes);
+
+        List<Integer> parcoursAttendu = Arrays.asList(1, 3, 5);
+        List<Integer> resultat = graphe2.parcoursSansRepetition(1,5,false);
+        
+        assertTrue(collectionsDansLeMemeOrdre(parcoursAttendu, resultat));
+    }
+    
+    
     @Disabled
     @Test
     void testGetVoisins() {

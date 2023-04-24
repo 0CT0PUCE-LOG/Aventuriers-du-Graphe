@@ -3,6 +3,8 @@ package fr.umontpellier.iut.graphes;
 import java.lang.reflect.Array;
 import java.util.*;
 
+import javax.swing.event.ListDataListener;
+
 import fr.umontpellier.iut.rails.Route;
 
 /**
@@ -639,7 +641,54 @@ public class Graphe {
      */
 
     public List<Integer> parcoursSansRepetition(int depart, int arrivee, boolean pondere) {
-        throw new RuntimeException("Méthode non implémentée");
+        List<Integer> chemin = parcoursSansRepetitionRec(depart, arrivee, new ArrayList<>());
+        if(pondere){
+            int somme = 0;
+            for(int i=0; i< chemin.size()-1; i++){
+                somme+= getArete(chemin.get(i), chemin.get(i+1)).route().getLongueur();
+            }
+            chemin.add(somme);
+        }
+        return chemin;
+    }
+
+    private Arete getArete(int i, int j){
+        if(existeArete(new Arete(i, j, null))){
+            for (Arete a : mapAretes.get(i)) {
+                if(a.incidenteA(j)){
+                    return a;
+                }
+            }
+        }
+        return null;
+    }
+
+    private List<Integer> parcoursSansRepetitionRec(int sommetCourant, int arrivee, List<Integer> dejaVu){
+        ArrayList<Integer> voisins = new ArrayList<>(getVoisins(sommetCourant));
+        dejaVu.add(sommetCourant);
+        if(sommetCourant == arrivee){
+            return new ArrayList<Integer>(Arrays.asList(sommetCourant));
+        }
+        else if(dejaVu.containsAll(voisins)){
+            return new ArrayList<>();
+        }
+        else{
+            int i=0;
+            List<Integer> chemin = new ArrayList<>();
+            while(i<voisins.size()){
+                List<Integer> dejaVuLocal = new ArrayList<>(dejaVu);
+                if(!dejaVuLocal.contains(voisins.get(i))){
+                    List<Integer> propositionChemin = parcoursSansRepetitionRec(voisins.get(i), arrivee, dejaVuLocal);   
+                    if(propositionChemin.contains(arrivee) && (chemin.size()-1 > propositionChemin.size() || chemin.isEmpty())){
+                        chemin.clear();
+                        chemin.add(sommetCourant);
+                        chemin.addAll(propositionChemin);
+                    }               
+                }
+                i++;
+            }
+            return chemin;
+        }
     }
 
 
