@@ -250,6 +250,14 @@ public class Plateau {
      * Les sommets du graphe correspondent aux identifiants des villes (qui sont des entiers).
      */
     public Graphe getGraphe(Collection<Route> ensembleDeRoutes) {
-        throw new RuntimeException("Méthode non implémentée");
+        Graphe graphe = new Graphe();
+        for(Ville ville : villes) {
+            graphe.ajouterSommet(ville.getId());
+        }
+        for(Route route : ensembleDeRoutes) {
+            Arete arete = new Arete(route.getVille1().getId(), route.getVille2().getId(), route);
+            graphe.ajouterArete(arete);
+        }
+        return graphe;
     }
 }
