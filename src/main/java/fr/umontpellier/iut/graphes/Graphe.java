@@ -482,56 +482,38 @@ public class Graphe {
      */
     public static boolean sequenceEstGraphe(List<Integer> sequence) {
         List<Integer> sequence_copy = ordonnerSequence(sequence);
-        boolean estGraphe ;
-        //vérifier si il y a un nombre de sommet de degre impair
         int compteur = 0;
         int compteur2 = 0;
-        for(int i=0; i<sequence_copy.size(); i++){
-            if( sequence_copy.get(i)%2!=0 ){
+        for (Integer value : sequence_copy) {
+            if (value % 2 != 0) {
                 compteur++;
             }
         }
-        System.out.println("nb de sommets impairs" + compteur);
-        System.out.println("sequence avant modifications" + sequence_copy);
         if(compteur%2 == 0){
-            //vérifier si il ne reste que des sommets de degre 0
             int b = sequence_copy.get(sequence_copy.size()-1);
             if(b > sequence_copy.size()-1){
-                System.out.println("b >= sequence_copy.size()-1");
-                estGraphe = false;
                 return false;
             }
             else{
                 sequence_copy.set(sequence_copy.size()-1, 0);
-                System.out.println("sequence pendant modifications" + sequence_copy);
                 int y = sequence_copy.size()-2;
                 while(b>0){
                     if(sequence_copy.get(y) != 0){
-                        System.out.println("replacing :" + sequence_copy.get(y) + " at i:"+ (y) + " by " + (sequence_copy.get(y) - 1));
                         sequence_copy.set(y, sequence_copy.get(y) - 1);
                         b--;
                         y--;
                     }
                     else{
-                        System.out.println("b>0 mais sequence_copy.get(y) == 0 BIS");
-                        estGraphe = false;
                         return false;
                     }
                 }
-                sequence_copy = ordonnerSequence(sequence_copy);
-                System.out.println("sequence apres modifications" + sequence_copy);
-                //vérifier si il ne reste que des 0 dans la sequence
-                for(int i=0; i<sequence_copy.size(); i++){
-                    if( sequence_copy.get(i) == 0 ){
+                for (Integer integer : sequence_copy) {
+                    if (integer == 0) {
                         compteur2++;
                     }
                 }
                 if(compteur2 == sequence_copy.size()){
-                    estGraphe = true;
                     return true;
-                }
-                else{
-                    sequenceEstGraphe(sequence_copy);
                 }
             }
         }
@@ -541,10 +523,11 @@ public class Graphe {
         return sequenceEstGraphe(sequence_copy);
     }
 
-    public static boolean sequenceEstGrapheAlternative(List<Integer> sequence) {
+
+    //version alternative pour les tests
+    /*
+    public static boolean sequenceEstGraphe2(List<Integer> sequence) {
         List<Integer> sequence_copy = ordonnerSequence(sequence);
-        boolean estGraphe ;
-        //vérifier si il y a un nombre de sommet de degre impair
         int compteur = 0;
         int compteur2 = 0;
         for(int i=0; i<sequence_copy.size(); i++){
@@ -553,10 +536,8 @@ public class Graphe {
             }
         }
         if(compteur%2 == 0){
-            //vérifier si il ne reste que des sommets de degre 0
             int b = sequence_copy.get(sequence_copy.size()-1);
             if(b > sequence_copy.size()-1){
-                estGraphe = false;
                 return false;
             }
             else{
@@ -569,19 +550,15 @@ public class Graphe {
                         y--;
                     }
                     else{
-                        estGraphe = false;
                         return false;
                     }
                 }
-                sequence_copy = ordonnerSequence(sequence_copy);
-                //vérifier si il ne reste que des 0 dans la sequence
-                for(int i=0; i<sequence_copy.size(); i++){
-                    if( sequence_copy.get(i) == 0 ){
+                for (Integer integer : sequence_copy) {
+                    if (integer == 0) {
                         compteur2++;
                     }
                 }
                 if(compteur2 == sequence_copy.size()){
-                    estGraphe = true;
                     return true;
                 }
                 else{
@@ -593,6 +570,8 @@ public class Graphe {
             return false;
         }
     }
+
+     */
 
 
 
@@ -816,5 +795,6 @@ public class Graphe {
     public Set<Route> ensembleBloquant(int ville1, int ville2) {
         throw new RuntimeException("Méthode non implémentée");
     }
+
 
 }

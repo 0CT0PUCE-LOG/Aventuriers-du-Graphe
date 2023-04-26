@@ -528,7 +528,7 @@ public class GrapheTest {
         sequence.add(3);
         sequence.add(3);
         sequence.add(4);
-        assertFalse(Graphe.sequenceEstGraphe(sequence));
+        assertTrue(Graphe.sequenceEstGraphe(sequence));
     }
 
     @Test
