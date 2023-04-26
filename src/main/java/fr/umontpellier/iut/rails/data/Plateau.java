@@ -234,7 +234,15 @@ public class Plateau {
      * Les sommets du graphe correspondent aux identifiants des villes (qui sont des entiers).
      */
     public Graphe getGraphe() {
-        throw new RuntimeException("Méthode non implémentée");
+        Graphe graphe = new Graphe();
+        for(Ville ville : villes) {
+            graphe.ajouterSommet(ville.getId());
+        }
+        for(Route route : routes) {
+            Arete arete = new Arete(route.getVille1().getId(), route.getVille2().getId(), route);
+            graphe.ajouterArete(arete);
+        }
+        return graphe;
     }
 
     /**
