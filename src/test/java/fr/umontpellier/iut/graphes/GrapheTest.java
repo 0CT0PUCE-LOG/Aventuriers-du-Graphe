@@ -708,6 +708,43 @@ public class GrapheTest {
         
         assertTrue(collectionsDansLeMemeOrdre(parcoursAttendu, resultat));
     }
+
+    @Test
+    void testparcoursSansRepetitionSousListe1(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(1, 2));
+        aretes.add(new Arete(2, 3));
+        aretes.add(new Arete(2, 5));
+
+        Graphe graphe2 = new Graphe(aretes);
+
+        List<Integer> sousListe = Arrays.asList(1, 3, 5);
+
+        List<Integer> resultat = graphe2.parcoursSansRepetition(sousListe);
+        
+        assertTrue(collectionsDansLeMemeOrdre(new ArrayList<>(), resultat));
+    }
+
+    @Test
+    void testparcoursSansRepetitionSousListe2(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(1, 2));
+        aretes.add(new Arete(2, 3));
+        aretes.add(new Arete(2, 5));
+        aretes.add(new Arete(3, 6));
+        aretes.add(new Arete(5, 6));
+        aretes.add(new Arete(5, 7));
+
+        Graphe graphe2 = new Graphe(aretes);
+
+        List<Integer> sousListe = Arrays.asList(1, 3, 7);
+
+        List<Integer> parcoursAttendu = Arrays.asList(1, 2, 3, 6, 5, 7);
+
+        List<Integer> resultat = graphe2.parcoursSansRepetition(sousListe);
+        
+        assertTrue(collectionsDansLeMemeOrdre(parcoursAttendu, resultat));
+    }
     
     
     @Disabled

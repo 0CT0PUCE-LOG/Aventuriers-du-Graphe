@@ -778,7 +778,34 @@ public class Graphe {
      * Si le chemin n'existe pas, retourne une liste vide.
      */
     public List<Integer> parcoursSansRepetition(List<Integer> listeSommets) {
-        throw new RuntimeException("Méthode non implémentée");
+        return parcoursSansRepetitionRec(listeSommets.get(0), listeSommets, new ArrayList<Integer>());
+    }
+
+    private List<Integer> parcoursSansRepetitionRec(int sommetCourant, List<Integer> sommetDestination, List<Integer> dejaVu){
+        ArrayList<Integer> voisins = new ArrayList<>(getVoisins(sommetCourant));
+        dejaVu.add(sommetCourant);
+        if(dejaVu.containsAll(sommetDestination)){
+            return new ArrayList<Integer>(dejaVu);
+        }
+        else if(dejaVu.containsAll(voisins)){
+            return new ArrayList<>();
+        }
+        else{
+            int i=0;
+            List<Integer> chemin = new ArrayList<>();
+            while(i<voisins.size()){
+                List<Integer> dejaVuLocal = new ArrayList<>(dejaVu);
+                if(!dejaVuLocal.contains(voisins.get(i))){
+                    List<Integer> propositionChemin = parcoursSansRepetitionRec(voisins.get(i), sommetDestination, dejaVuLocal);   
+                    if(propositionChemin.containsAll(sommetDestination) && (chemin.size()-1 > propositionChemin.size() || chemin.isEmpty())){
+                        chemin.clear();
+                        chemin.addAll(propositionChemin);
+                    }               
+                }
+                i++;
+            }
+            return chemin;
+        }
     }
 
 
