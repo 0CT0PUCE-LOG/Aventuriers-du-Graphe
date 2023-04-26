@@ -480,9 +480,9 @@ public class Graphe {
      * @return true si et seulement si la séquence d'entiers passée en paramètre correspond à un graphe simple valide.
      * La pondération des arêtes devrait être ignorée.
      */
-    public static boolean sequenceEstGraphe2(List<Integer> sequence) {
+    public static boolean sequenceEstGraphe(List<Integer> sequence) {
         List<Integer> sequence_copy = ordonnerSequence(sequence);
-        boolean estGraphe = false;
+        boolean estGraphe ;
         //vérifier si il y a un nombre de sommet de degre impair
         int compteur = 0;
         int compteur2 = 0;
@@ -499,7 +499,7 @@ public class Graphe {
             if(b > sequence_copy.size()-1){
                 System.out.println("b >= sequence_copy.size()-1");
                 estGraphe = false;
-                return estGraphe;
+                return false;
             }
             else{
                 sequence_copy.set(sequence_copy.size()-1, 0);
@@ -515,7 +515,7 @@ public class Graphe {
                     else{
                         System.out.println("b>0 mais sequence_copy.get(y) == 0 BIS");
                         estGraphe = false;
-                        return estGraphe;
+                        return false;
                     }
                 }
                 sequence_copy = ordonnerSequence(sequence_copy);
@@ -528,46 +528,74 @@ public class Graphe {
                 }
                 if(compteur2 == sequence_copy.size()){
                     estGraphe = true;
-                    return estGraphe;
+                    return true;
                 }
                 else{
                     sequenceEstGraphe(sequence_copy);
                 }
             }
         }
-        System.out.println("sequence finale" + sequence_copy);
-        return estGraphe;
+        else{
+            return false;
+        }
+        return sequenceEstGraphe(sequence_copy);
     }
 
-    public static boolean sequenceEstGraphe(List<Integer> sequence){
-        int n = sequence.size();
-        if(n == 0){
-            return false;
+    public static boolean sequenceEstGrapheAlternative(List<Integer> sequence) {
+        List<Integer> sequence_copy = ordonnerSequence(sequence);
+        boolean estGraphe ;
+        //vérifier si il y a un nombre de sommet de degre impair
+        int compteur = 0;
+        int compteur2 = 0;
+        for(int i=0; i<sequence_copy.size(); i++){
+            if( sequence_copy.get(i)%2!=0 ){
+                compteur++;
+            }
         }
-        sequence = ordonnerSequence(sequence);
-        int sum = 0;
-        for(int i=0; i<n; i++){
-            int degree = sequence.get(i);
-            if( degree >= n){
-                //degree < 1 ||
+        if(compteur%2 == 0){
+            //vérifier si il ne reste que des sommets de degre 0
+            int b = sequence_copy.get(sequence_copy.size()-1);
+            if(b > sequence_copy.size()-1){
+                estGraphe = false;
                 return false;
             }
-            if(i < n-1 && degree < sequence.get(i+1)){
-                return false;
+            else{
+                sequence_copy.set(sequence_copy.size()-1, 0);
+                int y = sequence_copy.size()-2;
+                while(b>0){
+                    if(sequence_copy.get(y) != 0){
+                        sequence_copy.set(y, sequence_copy.get(y) - 1);
+                        b--;
+                        y--;
+                    }
+                    else{
+                        estGraphe = false;
+                        return false;
+                    }
+                }
+                sequence_copy = ordonnerSequence(sequence_copy);
+                //vérifier si il ne reste que des 0 dans la sequence
+                for(int i=0; i<sequence_copy.size(); i++){
+                    if( sequence_copy.get(i) == 0 ){
+                        compteur2++;
+                    }
+                }
+                if(compteur2 == sequence_copy.size()){
+                    estGraphe = true;
+                    return true;
+                }
+                else{
+                    return sequenceEstGraphe(sequence_copy);
+                }
             }
-            sum += degree;
         }
-        if(n > 1 && sequence.get(n-1) == 1 && sum < 2*(n-1)){
+        else{
             return false;
         }
-        if(n > 1 && sequence.get(n-1) > n-1){
-            return false;
-        }
-        if(n > 1 && sequence.get(n-1) == n-1 && sum % 2 == 1){
-            return false;
-        }
-        return true;
     }
+
+
+
 
 
 
