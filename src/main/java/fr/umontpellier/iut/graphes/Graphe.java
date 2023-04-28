@@ -696,14 +696,7 @@ public class Graphe {
      */
 
     public List<Integer> parcoursSansRepetition(int depart, int arrivee, boolean pondere) {
-        List<Integer> chemin = parcoursSansRepetitionRec(depart, arrivee, new ArrayList<>());
-        if(pondere){
-            int somme = 0;
-            for(int i=0; i< chemin.size()-1; i++){
-                somme+= getArete(chemin.get(i), chemin.get(i+1)).route().getLongueur();
-            }
-            chemin.add(somme);
-        }
+        List<Integer> chemin = parcoursSansRepetitionRec(depart, arrivee, new ArrayList<>(), pondere);
         return chemin;
     }
 
@@ -718,7 +711,21 @@ public class Graphe {
         return null;
     }
 
-    private List<Integer> parcoursSansRepetitionRec(int sommetCourant, int arrivee, List<Integer> dejaVu){
+    private int ponderationChemin(List<Integer> chemin, boolean pondere){
+        if(pondere){
+            int result = 0;
+            for(int i=0; i<chemin.size()-1; i++){
+                result+= getArete(chemin.get(i), chemin.get(i+1)).route().getLongueur();
+            }
+            return result;
+        }
+        else{
+            return chemin.size();
+        }
+        
+    }
+
+    private List<Integer> parcoursSansRepetitionRec(int sommetCourant, int arrivee, List<Integer> dejaVu, boolean pondere){
         ArrayList<Integer> voisins = new ArrayList<>(getVoisins(sommetCourant));
         dejaVu.add(sommetCourant);
         if(sommetCourant == arrivee){
@@ -730,14 +737,16 @@ public class Graphe {
         else{
             int i=0;
             List<Integer> chemin = new ArrayList<>();
+            int ponderationChemin = 0;
             while(i<voisins.size()){
                 List<Integer> dejaVuLocal = new ArrayList<>(dejaVu);
                 if(!dejaVuLocal.contains(voisins.get(i))){
-                    List<Integer> propositionChemin = parcoursSansRepetitionRec(voisins.get(i), arrivee, dejaVuLocal);   
-                    if(propositionChemin.contains(arrivee) && (chemin.size()-1 > propositionChemin.size() || chemin.isEmpty())){
+                    List<Integer> propositionChemin = parcoursSansRepetitionRec(voisins.get(i), arrivee, dejaVuLocal, pondere);
+                    propositionChemin.add(0,sommetCourant);   
+                    if(propositionChemin.contains(arrivee) && (ponderationChemin > ponderationChemin(propositionChemin, pondere) || chemin.isEmpty())){
                         chemin.clear();
-                        chemin.add(sommetCourant);
                         chemin.addAll(propositionChemin);
+                        ponderationChemin = ponderationChemin(propositionChemin, pondere);
                     }               
                 }
                 i++;
@@ -809,7 +818,6 @@ public class Graphe {
     }
 
     private boolean CollectionEstDansLeBonOrdre(List<Integer> listeDeReference, List<Integer> listeTest){
-        boolean result = true;
         int i=0;
         for(int sommet : listeTest){
             if(sommet == listeDeReference.get(i)){
