@@ -797,7 +797,7 @@ public class Graphe {
                 List<Integer> dejaVuLocal = new ArrayList<>(dejaVu);
                 if(!dejaVuLocal.contains(voisins.get(i))){
                     List<Integer> propositionChemin = parcoursSansRepetitionRec(voisins.get(i), sommetDestination, dejaVuLocal);   
-                    if(propositionChemin.containsAll(sommetDestination) && (chemin.size()-1 > propositionChemin.size() || chemin.isEmpty())){
+                    if(propositionChemin.containsAll(sommetDestination) && (chemin.size()-1 > propositionChemin.size() || chemin.isEmpty()) && CollectionEstDansLeBonOrdre(sommetDestination, propositionChemin)){
                         chemin.clear();
                         chemin.addAll(propositionChemin);
                     }               
@@ -806,6 +806,21 @@ public class Graphe {
             }
             return chemin;
         }
+    }
+
+    private boolean CollectionEstDansLeBonOrdre(List<Integer> listeDeReference, List<Integer> listeTest){
+        boolean result = true;
+        int i=0;
+        for(int sommet : listeTest){
+            if(sommet == listeDeReference.get(i)){
+                i++;
+                if(i == listeDeReference.size()){
+                    return true;
+                }
+            }
+        }
+        return false;
+
     }
 
 
