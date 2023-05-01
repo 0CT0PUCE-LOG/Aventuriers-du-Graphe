@@ -6,6 +6,7 @@ import java.util.*;
 import javax.swing.event.ListDataListener;
 
 import fr.umontpellier.iut.rails.Route;
+import fr.umontpellier.iut.rails.RouteMaritime;
 
 /**
  * (Multi) Graphe non-orienté pondéré. Le poids de chaque arête correspond à la longueur de la route correspondante.
@@ -772,7 +773,53 @@ public class Graphe {
      * Pré-requis le graphe `this` est un graphe avec des routes (les objets routes ne sont pas null).
      */
     public List<Integer> parcoursSansRepetition(int depart, int arrivee, int nbWagons, int nbBateaux) {
-        throw new RuntimeException("Méthode non implémentée");
+        return parcoursSansRepetitionRec(depart, arrivee, new ArrayList<>(), nbWagons, nbBateaux);
+    }
+
+    private List<Integer> parcoursSansRepetitionRec(int sommetCourant, int arrivee, List<Integer> dejaVu, int nbWagons, int nbBateaux){
+        ArrayList<Integer> voisins = new ArrayList<>(getVoisins(sommetCourant));
+        dejaVu.add(sommetCourant);
+        if(sommetCourant == arrivee){
+            return new ArrayList<Integer>(Arrays.asList(sommetCourant));
+        }
+        else if(dejaVu.containsAll(voisins)){
+            return new ArrayList<>();
+        }
+        else{
+            int i=0;
+            List<Integer> chemin = new ArrayList<>();
+        
+            while(i<voisins.size() && chemin.isEmpty()){
+                List<Integer> dejaVuLocal = new ArrayList<>(dejaVu);
+                if(!dejaVuLocal.contains(voisins.get(i))){
+                    List<Integer> propositionChemin = parcoursSansRepetitionRec(voisins.get(i), arrivee, dejaVuLocal, nbWagons, nbBateaux);
+                    propositionChemin.add(0,sommetCourant);
+                    int[] coutPropositionChemin = coutPionsChemin(propositionChemin);   
+                    if(propositionChemin.contains(arrivee) && coutPropositionChemin[0]<= nbWagons && coutPropositionChemin[1]<= nbBateaux){
+                        chemin.addAll(propositionChemin);
+                    }               
+                }
+                i++;
+            }
+            return chemin;
+        }
+    }
+
+    //indice 0 nbPionsWagon
+    //indice 1 nbPionsBateau
+    private int[] coutPionsChemin(List<Integer> chemin){
+        int[] compteurs = new int[2];
+        Route tempo;
+        for(int i=0; i<chemin.size()-1; i++){
+            tempo = getArete(chemin.get(i), chemin.get(i+1)).route();
+            if(tempo instanceof RouteMaritime){
+                compteurs[1]+= tempo.getLongueur();
+            }
+            else{
+                compteurs[0]+= tempo.getLongueur();
+            }
+        }
+        return compteurs;
     }
 
 
