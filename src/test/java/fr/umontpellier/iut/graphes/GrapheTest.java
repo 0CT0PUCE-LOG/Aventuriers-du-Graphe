@@ -4,10 +4,12 @@ package fr.umontpellier.iut.graphes;
 import fr.umontpellier.iut.rails.Route;
 import fr.umontpellier.iut.rails.RouteMaritime;
 import fr.umontpellier.iut.rails.data.Couleur;
+import fr.umontpellier.iut.rails.data.Plateau;
 import fr.umontpellier.iut.rails.data.Ville;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.reflections.vfs.SystemDir;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -668,6 +670,8 @@ public class GrapheTest {
         assertEquals(2, graphe2.getSequenceDegre().get(6));
     }
 
+
+
     @Test
     void testGetSequenceDegre2(){
         List<Arete> aretes = new ArrayList<>();
@@ -800,6 +804,18 @@ public class GrapheTest {
         
         assertTrue(collectionsDansLeMemeOrdre(parcoursAttendu, resultat));
     }
+/*
+    @Test
+    void testGetGraphe{
+        List<Route> routes = new ArrayList<>();
+        routes.add(new Route(0, 1));
+        List<Ville> villes = new ArrayList<>();
+        villes.add(new Ville(Sydney, 0));
+        Plateau plateau = new Plateau(3,3);
+
+    }
+
+ */
     
     
     @Disabled

@@ -231,20 +231,44 @@ public class Graphe {
     }
 
     /**
-     *
-     * @return le degré max, et Integer.Min_VALUE si le graphe est vide
+     * @return le degré max, et Integer.MIN_VALUE si le graphe est vide
      */
-    public int degreMax(){
+    public int degreMax() {
+        if (mapAretes.isEmpty()) {
+            return Integer.MIN_VALUE;
+        }
         int degreMax = Integer.MIN_VALUE;
-        for(Integer i : mapAretes.keySet()){
-            if(degre(i) > degreMax){
-                degreMax = degre(i);
+        for (Integer sommet : mapAretes.keySet()) {
+            int degreSommet = degre(sommet);
+            if (degreSommet > degreMax) {
+                degreMax = degreSommet;
             }
         }
-        return degreMax;        
+        return degreMax;
     }
 
-    public boolean estSimple(){
+
+    public boolean estSimple() {
+        // Vérifier si chaque paire de sommets distincts a au plus une arête entre eux
+        // Parcourir tous les sommets du graphe
+        for (int i = 0; i < nbSommets(); i++) {
+            for (int j = 0; j < nbSommets(); j++) {
+                // Vérifier s'ils sont distincts
+                if (i != j) {
+                    // Vérifier si une arête existe entre les sommets i et j
+                    if (existeArete(i, j)) {
+                        // Si une arête existe, le graphe n'est pas simple
+                        return false;
+                    }
+                }
+            }
+        }
+        // Si aucune arête n'est trouvée pour chaque paire de sommets distincts,
+        // le graphe est simple
+        return true;
+    }
+
+    public boolean estSimpleBIS(){
         if(estAcyclique()){
 
         }
