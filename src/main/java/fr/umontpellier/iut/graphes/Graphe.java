@@ -241,19 +241,27 @@ public class Graphe {
                 degreMax = degre(i);
             }
         }
-        if(degreMax==Integer.MIN_VALUE){
-            return 0;
-        }
-        else{
-            return degreMax;
-        }
+        return degreMax;        
     }
 
     public boolean estSimple(){
+        if(estAcyclique()){
+
+        }
+        else{
+            return false;
+        }
         for(Integer i : mapAretes.keySet()){
+            HashMap<Integer, Integer> compteur = new HashMap<>();            
             for(Arete a : mapAretes.get(i)){
-                if(a.i()!=i && a.j()!=i){
-                    return false;
+                if(!compteur.keySet().contains(a.getAutreSommet(i))){
+                    compteur.put(a.getAutreSommet(i),0);
+                }
+                else{
+                    compteur.put(a.getAutreSommet(i), compteur.get(a.getAutreSommet(i))+1);
+                    if(compteur.get(a.getAutreSommet(i)) > 1 ){
+                        return false;
+                    }
                 }
             }
         }
@@ -265,15 +273,7 @@ public class Graphe {
      *
      */
     public boolean estComplet() {
-        //TODO peut être opti avec la fonction nbSommetDeDegre(int v) en une seule ligne
-        for(Integer i : mapAretes.keySet()){
-            for(Integer j : mapAretes.keySet()){
-                if(i!=j && !existeArete(new Arete(i,j))){
-                    return false;
-                }
-            }
-        }
-        return true;
+        return nbSommetDeDegre(nbSommets()-1) == nbSommets();
     }
 
     /**
