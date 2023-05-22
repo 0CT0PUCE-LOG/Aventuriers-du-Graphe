@@ -787,7 +787,7 @@ public class Joueur {
      * s'il n'est pas possible de la compléter
      */
     public Collection<Route> routesPourCompleterDestination(Destination d) {
-
+        throw new RuntimeException("Méthode non implémentée");
     }
 
     /**
@@ -812,6 +812,6 @@ public class Joueur {
      * @return
      */
     public Collection<Route> routesEnSurbrillancePourDestination(Destination d) {
-
+        throw new RuntimeException("Méthode non implémentée");
     }
 }

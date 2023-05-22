@@ -231,29 +231,61 @@ public class Graphe {
     }
 
     /**
-     *
-     * @return le degré max, et Integer.Min_VALUE si le graphe est vide
+     * @return le degré max, et Integer.MIN_VALUE si le graphe est vide
      */
-    public int degreMax(){
+    public int degreMax() {
+        if (mapAretes.isEmpty()) {
+            return Integer.MIN_VALUE;
+        }
         int degreMax = Integer.MIN_VALUE;
-        for(Integer i : mapAretes.keySet()){
-            if(degre(i) > degreMax){
-                degreMax = degre(i);
+        for (Integer sommet : mapAretes.keySet()) {
+            int degreSommet = degre(sommet);
+            if (degreSommet > degreMax) {
+                degreMax = degreSommet;
             }
         }
-        if(degreMax==Integer.MIN_VALUE){
-            return 0;
-        }
-        else{
-            return degreMax;
-        }
+        return degreMax;
     }
 
-    public boolean estSimple(){
+
+    public boolean estSimple() {
+        // Vérifier si chaque paire de sommets distincts a au plus une arête entre eux
+        // Parcourir tous les sommets du graphe
+        for (int i = 0; i < nbSommets(); i++) {
+            for (int j = 0; j < nbSommets(); j++) {
+                // Vérifier s'ils sont distincts
+                if (i != j) {
+                    // Vérifier si une arête existe entre les sommets i et j
+                    if (sontAdjacents(i, j)) {
+                        // Si une arête existe, le graphe n'est pas simple
+                        return false;
+                    }
+                }
+            }
+        }
+        // Si aucune arête n'est trouvée pour chaque paire de sommets distincts,
+        // le graphe est simple
+        return true;
+    }
+
+    public boolean estSimpleBIS(){
+        if(estAcyclique()){
+
+        }
+        else{
+            return false;
+        }
         for(Integer i : mapAretes.keySet()){
+            HashMap<Integer, Integer> compteur = new HashMap<>();
             for(Arete a : mapAretes.get(i)){
-                if(a.i()!=i && a.j()!=i){
-                    return false;
+                if(!compteur.keySet().contains(a.getAutreSommet(i))){
+                    compteur.put(a.getAutreSommet(i),0);
+                }
+                else{
+                    compteur.put(a.getAutreSommet(i), compteur.get(a.getAutreSommet(i))+1);
+                    if(compteur.get(a.getAutreSommet(i)) > 1 ){
+                        return false;
+                    }
                 }
             }
         }
@@ -265,15 +297,7 @@ public class Graphe {
      *
      */
     public boolean estComplet() {
-        //TODO peut être opti avec la fonction nbSommetDeDegre(int v) en une seule ligne
-        for(Integer i : mapAretes.keySet()){
-            for(Integer j : mapAretes.keySet()){
-                if(i!=j && !existeArete(new Arete(i,j))){
-                    return false;
-                }
-            }
-        }
-        return true;
+        return nbSommetDeDegre(nbSommets()-1) == nbSommets();
     }
 
     /**
@@ -346,7 +370,7 @@ public class Graphe {
         else{
             boolean result = false;
             int i=0;
-            
+
             while(i<voisins.size()&& result==false){
                 if(!dejaVu.contains(voisins.get(i))){
                     result = result || estConnexe(voisins.get(i), dejaVu);
@@ -392,7 +416,7 @@ public class Graphe {
             result = estAcyclique(voisins.get(i), dejaVu, copieGraphe);
             i++;
         }
-        return result; 
+        return result;
     }
 
     public boolean estUnArbre(){
@@ -622,14 +646,14 @@ public class Graphe {
                 do{
                     fini = !incrementeCompteurBijection(bijections, compteurBijections);
                 }while(!bijectionEstValide(bijections, compteurBijections) && !fini);
-                
+
             }
-            return false;    
+            return false;
         }
         else{
             return false;
         }
-    }    
+    }
 
     private static boolean bijectionEstIsomorphe(Graphe g1, Graphe g2, Map<Integer, List<Integer>> bijection, Map<Integer, Integer> compteurBijection){
         Set<Integer> voisins = new HashSet<>();
@@ -640,11 +664,11 @@ public class Graphe {
                     return false;
                 }
             }
-            
-        }    
+
+        }
         return true;
     }
-    
+
     private static boolean incrementeCompteurBijection(Map<Integer, List<Integer>> bijection, Map<Integer, Integer> compteurBijection){
         List<Integer> sommets = new ArrayList<>(bijection.keySet());
         for (int i = 0; i< sommets.size(); i++) {
@@ -655,7 +679,7 @@ public class Graphe {
             else if(i!= sommets.size()-1){
                 for (int j = 0; j<= i; j++) {
                     compteurBijection.put(sommets.get(i), 0);
-                }    
+                }
             }
         }
         return false;
@@ -670,7 +694,7 @@ public class Graphe {
             else{
                 dejaVu.add(bijection.get(i).get(compteurBijection.get(i)));
             }
-            
+
         }
         return true;
     }
@@ -723,7 +747,7 @@ public class Graphe {
         else{
             return chemin.size();
         }
-        
+
     }
 
     private List<Integer> parcoursSansRepetitionRec(int sommetCourant, int arrivee, List<Integer> dejaVu, boolean pondere){
@@ -743,12 +767,12 @@ public class Graphe {
                 List<Integer> dejaVuLocal = new ArrayList<>(dejaVu);
                 if(!dejaVuLocal.contains(voisins.get(i))){
                     List<Integer> propositionChemin = parcoursSansRepetitionRec(voisins.get(i), arrivee, dejaVuLocal, pondere);
-                    propositionChemin.add(0,sommetCourant);   
+                    propositionChemin.add(0,sommetCourant);
                     if(propositionChemin.contains(arrivee) && (ponderationChemin > ponderationChemin(propositionChemin, pondere) || chemin.isEmpty())){
                         chemin.clear();
                         chemin.addAll(propositionChemin);
                         ponderationChemin = ponderationChemin(propositionChemin, pondere);
-                    }               
+                    }
                 }
                 i++;
             }
@@ -788,16 +812,16 @@ public class Graphe {
         else{
             int i=0;
             List<Integer> chemin = new ArrayList<>();
-        
+
             while(i<voisins.size() && chemin.isEmpty()){
                 List<Integer> dejaVuLocal = new ArrayList<>(dejaVu);
                 if(!dejaVuLocal.contains(voisins.get(i))){
                     List<Integer> propositionChemin = parcoursSansRepetitionRec(voisins.get(i), arrivee, dejaVuLocal, nbWagons, nbBateaux);
                     propositionChemin.add(0,sommetCourant);
-                    int[] coutPropositionChemin = coutPionsChemin(propositionChemin);   
+                    int[] coutPropositionChemin = coutPionsChemin(propositionChemin);
                     if(propositionChemin.contains(arrivee) && coutPropositionChemin[0]<= nbWagons && coutPropositionChemin[1]<= nbBateaux){
                         chemin.addAll(propositionChemin);
-                    }               
+                    }
                 }
                 i++;
             }
@@ -821,6 +845,7 @@ public class Graphe {
         }
         return compteurs;
     }
+
 
 
 
