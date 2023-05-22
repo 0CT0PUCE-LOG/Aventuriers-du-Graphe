@@ -803,7 +803,7 @@ public class Joueur {
             }while(!nomVille.equals(plateau.getVilles().get(i).nom()));
         }
 
-        List<Integer> cheminVille = graphePlateau.parcoursSansRepetition(sousListe);
+        List<Integer> cheminVille = graphePlateau.parcoursSansRepetition(sousListe, true);
         List<Route> cheminRoute = new ArrayList<>();
 
         for(int i=0; i< cheminVille.size()-1; i++){

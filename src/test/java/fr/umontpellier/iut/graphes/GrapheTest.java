@@ -3,6 +3,7 @@ package fr.umontpellier.iut.graphes;
 
 import fr.umontpellier.iut.rails.Route;
 import fr.umontpellier.iut.rails.RouteMaritime;
+import fr.umontpellier.iut.rails.RouteTerrestre;
 import fr.umontpellier.iut.rails.data.Couleur;
 import fr.umontpellier.iut.rails.data.Plateau;
 import fr.umontpellier.iut.rails.data.Ville;
@@ -805,6 +806,88 @@ public class GrapheTest {
         
         assertTrue(collectionsDansLeMemeOrdre(parcoursAttendu, resultat));
     }
+
+    @Test
+    void testparcoursSansRepetition2(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(1, 2, new RouteTerrestre(new Ville("1", false), new Ville("2", false), null, 2)));
+        aretes.add(new Arete(2, 3, new RouteTerrestre(new Ville("2", false), new Ville("3", false), null, 2)));
+        aretes.add(new Arete(1, 3, new RouteTerrestre(new Ville("1", false), new Ville("3", false), null, 5)));
+
+
+        Graphe graphe2 = new Graphe(aretes);
+        List<Integer> resultat = graphe2.parcoursSansRepetition(1, 3, true);
+        List<Integer> parcoursAttendu = Arrays.asList(1,2,3);
+
+        assertTrue(collectionsDansLeMemeOrdre(parcoursAttendu, resultat));
+    }
+
+    @Test
+    void testparcoursSansRepetition3(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(1, 2, new RouteTerrestre(new Ville("1", false), new Ville("2", false), null, 2)));
+        aretes.add(new Arete(2, 3, new RouteTerrestre(new Ville("2", false), new Ville("3", false), null, 2)));
+        aretes.add(new Arete(1, 3, new RouteTerrestre(new Ville("1", false), new Ville("3", false), null, 3)));
+
+
+        Graphe graphe2 = new Graphe(aretes);
+        List<Integer> resultat = graphe2.parcoursSansRepetition(1, 3, true);
+        List<Integer> parcoursAttendu = Arrays.asList(1,3);
+
+        assertTrue(collectionsDansLeMemeOrdre(parcoursAttendu, resultat));
+    }
+
+    @Test
+    void testEstComplet1(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(1, 2));
+        aretes.add(new Arete(1, 3));
+        aretes.add(new Arete(1, 4));
+
+        aretes.add(new Arete(2, 1));
+        aretes.add(new Arete(2, 3));
+        aretes.add(new Arete(2, 4));
+
+        aretes.add(new Arete(3, 1));
+        aretes.add(new Arete(3, 2));
+        aretes.add(new Arete(3, 4));
+
+        aretes.add(new Arete(4, 1));
+        aretes.add(new Arete(4, 2));
+        aretes.add(new Arete(4, 3));
+        
+
+        Graphe graphe2 = new Graphe(aretes);
+        assertTrue(graphe2.estComplet());
+    }
+
+    @Test
+    void testEstComplet2(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(1, 2));
+        aretes.add(new Arete(1, 3));
+        aretes.add(new Arete(1, 4));
+
+        aretes.add(new Arete(2, 1));
+        aretes.add(new Arete(2, 3));
+        aretes.add(new Arete(2, 4));
+
+        Graphe graphe2 = new Graphe(aretes);
+        assertFalse(graphe2.estComplet());
+    }
+
+    @Test
+    void testDegreMax(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(1, 2));
+        aretes.add(new Arete(1, 3));
+        aretes.add(new Arete(1, 4));
+        aretes.add(new Arete(3, 4));
+
+        Graphe graphe2 = new Graphe(aretes);
+        assertEquals(graphe2.degreMax(), 3);
+    }
+
 /*
     @Test
     void testGetGraphe{

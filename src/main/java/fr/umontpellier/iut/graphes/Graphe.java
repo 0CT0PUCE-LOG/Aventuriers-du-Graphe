@@ -726,7 +726,7 @@ public class Graphe {
     }
 
     public Arete getArete(int i, int j){
-        if(existeArete(new Arete(i, j, null))){
+        if(getVoisins(i).contains(j)){
             for (Arete a : mapAretes.get(i)) {
                 if(a.incidenteA(j)){
                     return a;
@@ -865,6 +865,21 @@ public class Graphe {
             List<Integer> dejaVu = new ArrayList<>(intersect(listeSommets, chemin));
             dejaVu.addAll(subTab(listeSommets, i+2, listeSommets.size()));
             List<Integer> portionchemin = parcoursSansRepetitionRec(listeSommets.get(i), listeSommets.get(i+1),dejaVu, false);
+            if(!portionchemin.contains(listeSommets.get(i+1))){
+                return new ArrayList<>();
+            }
+            chemin.addAll(subTab(portionchemin,1, portionchemin.size()));
+        }
+        return chemin;
+    }
+
+    public List<Integer> parcoursSansRepetition(List<Integer> listeSommets, boolean ponderation) {
+        List<Integer> chemin = new ArrayList<>();
+        chemin.add(listeSommets.get(0));
+        for(int i=0; i< listeSommets.size()-1; i++){
+            List<Integer> dejaVu = new ArrayList<>(intersect(listeSommets, chemin));
+            dejaVu.addAll(subTab(listeSommets, i+2, listeSommets.size()));
+            List<Integer> portionchemin = parcoursSansRepetitionRec(listeSommets.get(i), listeSommets.get(i+1),dejaVu, ponderation);
             if(!portionchemin.contains(listeSommets.get(i+1))){
                 return new ArrayList<>();
             }

@@ -80,7 +80,7 @@ public class TestPerso {
     void testRoutesPourCompleterDestination(){
         Destination d = jeu.piocherDestination();
         List<Route> r = (List) joueur1.routesPourCompleterDestination(d);
-        System.out.println(r);
+        assertFalse(r.isEmpty());
 
     }
 
