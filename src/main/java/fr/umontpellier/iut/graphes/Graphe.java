@@ -231,61 +231,29 @@ public class Graphe {
     }
 
     /**
-     * @return le degré max, et Integer.MIN_VALUE si le graphe est vide
+     *
+     * @return le degré max, et Integer.Min_VALUE si le graphe est vide
      */
-    public int degreMax() {
-        if (mapAretes.isEmpty()) {
-            return Integer.MIN_VALUE;
-        }
+    public int degreMax(){
         int degreMax = Integer.MIN_VALUE;
-        for (Integer sommet : mapAretes.keySet()) {
-            int degreSommet = degre(sommet);
-            if (degreSommet > degreMax) {
-                degreMax = degreSommet;
+        for(Integer i : mapAretes.keySet()){
+            if(degre(i) > degreMax){
+                degreMax = degre(i);
             }
         }
-        return degreMax;
-    }
-
-
-    public boolean estSimple() {
-        // Vérifier si chaque paire de sommets distincts a au plus une arête entre eux
-        // Parcourir tous les sommets du graphe
-        for (int i = 0; i < nbSommets(); i++) {
-            for (int j = 0; j < nbSommets(); j++) {
-                // Vérifier s'ils sont distincts
-                if (i != j) {
-                    // Vérifier si une arête existe entre les sommets i et j
-                    if (existeArete(i, j)) {
-                        // Si une arête existe, le graphe n'est pas simple
-                        return false;
-                    }
-                }
-            }
-        }
-        // Si aucune arête n'est trouvée pour chaque paire de sommets distincts,
-        // le graphe est simple
-        return true;
-    }
-
-    public boolean estSimpleBIS(){
-        if(estAcyclique()){
-
+        if(degreMax==Integer.MIN_VALUE){
+            return 0;
         }
         else{
-            return false;
+            return degreMax;
         }
+    }
+
+    public boolean estSimple(){
         for(Integer i : mapAretes.keySet()){
-            HashMap<Integer, Integer> compteur = new HashMap<>();            
             for(Arete a : mapAretes.get(i)){
-                if(!compteur.keySet().contains(a.getAutreSommet(i))){
-                    compteur.put(a.getAutreSommet(i),0);
-                }
-                else{
-                    compteur.put(a.getAutreSommet(i), compteur.get(a.getAutreSommet(i))+1);
-                    if(compteur.get(a.getAutreSommet(i)) > 1 ){
-                        return false;
-                    }
+                if(a.i()!=i && a.j()!=i){
+                    return false;
                 }
             }
         }
@@ -297,7 +265,15 @@ public class Graphe {
      *
      */
     public boolean estComplet() {
-        return nbSommetDeDegre(nbSommets()-1) == nbSommets();
+        //TODO peut être opti avec la fonction nbSommetDeDegre(int v) en une seule ligne
+        for(Integer i : mapAretes.keySet()){
+            for(Integer j : mapAretes.keySet()){
+                if(i!=j && !existeArete(new Arete(i,j))){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**
