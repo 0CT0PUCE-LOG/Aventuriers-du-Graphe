@@ -249,22 +249,20 @@ public class Graphe {
 
 
     public boolean estSimple() {
-        // Vérifier si chaque paire de sommets distincts a au plus une arête entre eux
-        // Parcourir tous les sommets du graphe
-        for (int i = 0; i < nbSommets(); i++) {
-            for (int j = 0; j < nbSommets(); j++) {
-                // Vérifier s'ils sont distincts
-                if (i != j) {
-                    // Vérifier si une arête existe entre les sommets i et j
-                    if (sontAdjacents(i, j)) {
-                        // Si une arête existe, le graphe n'est pas simple
-                        return false;
-                    }
+        for(int sommet : mapAretes.keySet()){
+            HashMap<Integer, Integer> compteur = new HashMap<>();
+            for(Arete a : mapAretes.get(sommet)){
+                if(compteur.keySet().contains(a.getAutreSommet(sommet))){
+                    return false;
+                }
+                else if(a.i() == a.j()){
+                    return false;
+                }
+                else{
+                    compteur.put(sommet, 1);
                 }
             }
         }
-        // Si aucune arête n'est trouvée pour chaque paire de sommets distincts,
-        // le graphe est simple
         return true;
     }
 

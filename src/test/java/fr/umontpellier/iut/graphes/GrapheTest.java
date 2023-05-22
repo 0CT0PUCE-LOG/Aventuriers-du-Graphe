@@ -888,6 +888,32 @@ public class GrapheTest {
         assertEquals(graphe2.degreMax(), 3);
     }
 
+    @Test
+    void testEstSimple1(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(1, 2));
+        aretes.add(new Arete(1, 3));
+        aretes.add(new Arete(1, 4));
+        aretes.add(new Arete(3, 4));
+
+        Graphe graphe2 = new Graphe(aretes);
+
+        assertTrue(graphe2.estSimple());
+    }
+
+    @Test
+    void testEstSimple2(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(1, 2));
+        aretes.add(new Arete(1, 3));
+        aretes.add(new Arete(1, 1));
+        aretes.add(new Arete(3, 4));
+
+        Graphe graphe2 = new Graphe(aretes);
+
+        assertFalse(graphe2.estSimple());
+    }
+
 /*
     @Test
     void testGetGraphe{
