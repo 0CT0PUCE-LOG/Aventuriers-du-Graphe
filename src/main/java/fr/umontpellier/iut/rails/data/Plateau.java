@@ -33,6 +33,10 @@ public class Plateau {
         return routes;
     }
 
+    public List<Ville> getVilles() {
+        return villes;
+    }
+
     public static Plateau makePlateauMonde() {
         Map<String, Ville> villes = new HashMap<>();
         villes.put("Winnipeg", new Ville("Winnipeg", false));

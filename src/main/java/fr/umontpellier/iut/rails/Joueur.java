@@ -8,9 +8,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
 
+import fr.umontpellier.iut.graphes.Graphe;
 import fr.umontpellier.iut.rails.data.CarteTransport;
 import fr.umontpellier.iut.rails.data.Couleur;
 import fr.umontpellier.iut.rails.data.Destination;
+import fr.umontpellier.iut.rails.data.Plateau;
 import fr.umontpellier.iut.rails.data.TypeCarteTransport;
 import fr.umontpellier.iut.rails.data.Ville;
 
@@ -787,7 +789,29 @@ public class Joueur {
      * s'il n'est pas possible de la compléter
      */
     public Collection<Route> routesPourCompleterDestination(Destination d) {
-        throw new RuntimeException("Méthode non implémentée");
+        Plateau plateau = Plateau.makePlateauMonde();
+        Graphe graphePlateau = plateau.getGraphe();
+        List<Integer> sousListe = new ArrayList<>();
+
+        for(String nomVille : d.getVilles()){
+            int i=-1;
+            do{
+                i++;
+                if(nomVille.equals(plateau.getVilles().get(i).nom())){
+                    sousListe.add(plateau.getVilles().get(i).getId());
+                }
+            }while(!nomVille.equals(plateau.getVilles().get(i).nom()));
+        }
+
+        List<Integer> cheminVille = graphePlateau.parcoursSansRepetition(sousListe);
+        List<Route> cheminRoute = new ArrayList<>();
+
+        for(int i=0; i< cheminVille.size()-1; i++){
+            cheminRoute.add(graphePlateau.getArete(cheminVille.get(i), cheminVille.get(i+1)).route());
+        }
+
+        return cheminRoute;
+
     }
 
     /**

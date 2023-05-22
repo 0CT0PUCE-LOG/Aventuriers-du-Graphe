@@ -725,7 +725,7 @@ public class Graphe {
         return chemin;
     }
 
-    private Arete getArete(int i, int j){
+    public Arete getArete(int i, int j){
         if(existeArete(new Arete(i, j, null))){
             for (Arete a : mapAretes.get(i)) {
                 if(a.incidenteA(j)){
@@ -859,48 +859,36 @@ public class Graphe {
      * Si le chemin n'existe pas, retourne une liste vide.
      */
     public List<Integer> parcoursSansRepetition(List<Integer> listeSommets) {
-        return parcoursSansRepetitionRec(listeSommets.get(0), listeSommets, new ArrayList<Integer>());
+        List<Integer> chemin = new ArrayList<>();
+        chemin.add(listeSommets.get(0));
+        for(int i=0; i< listeSommets.size()-1; i++){
+            List<Integer> dejaVu = new ArrayList<>(intersect(listeSommets, chemin));
+            dejaVu.addAll(subTab(listeSommets, i+2, listeSommets.size()));
+            List<Integer> portionchemin = parcoursSansRepetitionRec(listeSommets.get(i), listeSommets.get(i+1),dejaVu, false);
+            if(!portionchemin.contains(listeSommets.get(i+1))){
+                return new ArrayList<>();
+            }
+            chemin.addAll(subTab(portionchemin,1, portionchemin.size()));
+        }
+        return chemin;
     }
 
-    private List<Integer> parcoursSansRepetitionRec(int sommetCourant, List<Integer> sommetDestination, List<Integer> dejaVu){
-        ArrayList<Integer> voisins = new ArrayList<>(getVoisins(sommetCourant));
-        dejaVu.add(sommetCourant);
-        if(dejaVu.containsAll(sommetDestination)){
-            return new ArrayList<Integer>(dejaVu);
-        }
-        else if(dejaVu.containsAll(voisins)){
-            return new ArrayList<>();
-        }
-        else{
-            int i=0;
-            List<Integer> chemin = new ArrayList<>();
-            while(i<voisins.size()){
-                List<Integer> dejaVuLocal = new ArrayList<>(dejaVu);
-                if(!dejaVuLocal.contains(voisins.get(i))){
-                    List<Integer> propositionChemin = parcoursSansRepetitionRec(voisins.get(i), sommetDestination, dejaVuLocal);   
-                    if(propositionChemin.containsAll(sommetDestination) && (chemin.size()-1 > propositionChemin.size() || chemin.isEmpty()) && CollectionEstDansLeBonOrdre(sommetDestination, propositionChemin)){
-                        chemin.clear();
-                        chemin.addAll(propositionChemin);
-                    }               
-                }
-                i++;
+    private List<Integer> intersect(List<Integer> a, List<Integer> b){
+        List<Integer> result = new ArrayList<Integer>();
+        for(int i : b){
+            if(a.contains(i)){
+                result.add(i);
             }
-            return chemin;
         }
+        return result;
     }
 
-    private boolean CollectionEstDansLeBonOrdre(List<Integer> listeDeReference, List<Integer> listeTest){
-        int i=0;
-        for(int sommet : listeTest){
-            if(sommet == listeDeReference.get(i)){
-                i++;
-                if(i == listeDeReference.size()){
-                    return true;
-                }
-            }
+    private List<Integer> subTab(List<Integer> tab, int debut, int fin){
+        List<Integer> result = new ArrayList<Integer>();
+        for(int i = debut; i<fin; i++){
+            result.add(tab.get(i));
         }
-        return false;
-
+        return result;
     }
 
 
