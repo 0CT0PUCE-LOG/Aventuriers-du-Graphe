@@ -424,7 +424,7 @@ public class Graphe {
     }
 
     public boolean estUnArbre(){
-        return estConnexe() && estAcyclique();
+        return estConnexe() && nbAretes() == nbSommets()-1;
     }
 
     public boolean estUneForet() {
