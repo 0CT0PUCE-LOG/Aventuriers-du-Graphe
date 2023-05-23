@@ -226,8 +226,14 @@ public class Graphe {
     }
 
     public int degre(int v) {
-        //TODO que faire si le sommet n'existe pas 
-        return mapAretes.get(v).size();
+        //TODO que faire si le sommet n'existe pas
+        if(mapAretes.containsKey(v)){
+            return mapAretes.get(v).size();
+        }
+        else{
+            return 0;
+        }
+        
     }
 
     /**

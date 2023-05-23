@@ -959,8 +959,6 @@ public class GrapheTest {
         assertTrue(collectionsDansLeMemeOrdre(resultat, parcoursAttendu));
     }
 
-    
-
 /*
     @Test
     void testGetGraphe{
