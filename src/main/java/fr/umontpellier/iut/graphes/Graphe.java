@@ -664,7 +664,7 @@ public class Graphe {
         for (Integer i : g1.mapAretes.keySet()) {
             voisins = g1.getVoisins(i);
             for (Integer v : voisins) {
-                if(!g2.existeArete(new Arete(bijection.get(i).get(compteurBijection.get(i)), bijection.get(v).get(compteurBijection.get(v)), null))){
+                if(!g2.sontAdjacents(bijection.get(i).get(compteurBijection.get(i)), bijection.get(v).get(compteurBijection.get(v)))){
                     return false;
                 }
             }
