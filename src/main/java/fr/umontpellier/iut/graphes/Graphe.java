@@ -810,21 +810,44 @@ public class Graphe {
         else{
             int i=0;
             List<Integer> chemin = new ArrayList<>();
+            int nbPionChemin = Integer.MAX_VALUE;
 
-            while(i<voisins.size() && chemin.isEmpty()){
+            while(i<voisins.size()){
                 List<Integer> dejaVuLocal = new ArrayList<>(dejaVu);
                 if(!dejaVuLocal.contains(voisins.get(i))){
                     List<Integer> propositionChemin = parcoursSansRepetitionRec(voisins.get(i), arrivee, dejaVuLocal, nbWagons, nbBateaux);
                     propositionChemin.add(0,sommetCourant);
                     int[] coutPropositionChemin = coutPionsChemin(propositionChemin);
-                    if(propositionChemin.contains(arrivee) && coutPropositionChemin[0]<= nbWagons && coutPropositionChemin[1]<= nbBateaux){
+                    if(propositionChemin.contains(arrivee) && coutPropositionChemin[0]<= nbWagons && coutPropositionChemin[1]<= nbBateaux && coutPropositionChemin[0]+coutPropositionChemin[1]< nbPionChemin){
+                        chemin.clear();
                         chemin.addAll(propositionChemin);
+                        nbPionChemin = coutPropositionChemin[0] + coutPropositionChemin[1];
                     }
                 }
                 i++;
             }
             return chemin;
         }
+    }
+
+    public List<Integer> parcoursSansRepetition(List<Integer> listeSommets, int nbWagons, int nbBateaux) {
+        List<Integer> chemin = new ArrayList<>();
+        chemin.add(listeSommets.get(0));
+        for(int i=0; i< listeSommets.size()-1; i++){
+            List<Integer> dejaVu = new ArrayList<>(intersect(listeSommets, chemin));
+            dejaVu.addAll(subTab(listeSommets, i+2, listeSommets.size()));
+            List<Integer> portionchemin = parcoursSansRepetitionRec(listeSommets.get(i), listeSommets.get(i+1),dejaVu, nbWagons, nbBateaux);
+            if(!portionchemin.contains(listeSommets.get(i+1))){
+                return new ArrayList<>();
+            }
+            chemin.addAll(subTab(portionchemin,1, portionchemin.size()));
+            int[] nbPions = new int[2];
+            nbPions = coutPionsChemin(portionchemin);
+            nbWagons -= nbPions[0];
+            nbBateaux -= nbPions[1];
+
+        }
+        return chemin;
     }
 
     //indice 0 nbPionsWagon

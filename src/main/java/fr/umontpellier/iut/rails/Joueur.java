@@ -824,8 +824,28 @@ public class Joueur {
      * s'il n'est pas possible de la compléter.
      */
     public Collection<Route> routesPourCompleterDestinationAvecPions(Destination d) {
-        // Cette fonction est à réécrire entièrement
-        throw new RuntimeException("Méthode non implémentée");
+        Plateau plateau = Plateau.makePlateauMonde();
+        Graphe graphePlateau = plateau.getGraphe();
+        List<Integer> sousListe = new ArrayList<>();
+
+        for(String nomVille : d.getVilles()){
+            int i=-1;
+            do{
+                i++;
+                if(nomVille.equals(plateau.getVilles().get(i).nom())){
+                    sousListe.add(plateau.getVilles().get(i).getId());
+                }
+            }while(!nomVille.equals(plateau.getVilles().get(i).nom()));
+        }
+
+        List<Integer> cheminVille = graphePlateau.parcoursSansRepetition(sousListe, nbPionsWagon, nbPionsBateau);
+        List<Route> cheminRoute = new ArrayList<>();
+
+        for(int i=0; i< cheminVille.size()-1; i++){
+            cheminRoute.add(graphePlateau.getArete(cheminVille.get(i), cheminVille.get(i+1)).route());
+        }
+
+        return cheminRoute;
     }
 
     /**

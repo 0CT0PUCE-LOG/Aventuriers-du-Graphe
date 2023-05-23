@@ -914,6 +914,53 @@ public class GrapheTest {
         assertFalse(graphe2.estSimple());
     }
 
+    @Test
+    void testParcoursSansRepetitionPions1(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(1, 2, new RouteTerrestre(new Ville("1", false), new Ville("2", false), null, 2)));
+        aretes.add(new Arete(2, 3, new RouteTerrestre(new Ville("2", false), new Ville("3", false), null, 2)));
+        aretes.add(new Arete(1, 3, new RouteMaritime(new Ville("1", false), new Ville("3", false), null, 3)));
+
+        Graphe graphe2 = new Graphe(aretes);
+
+        List<Integer> resultat = graphe2.parcoursSansRepetition(1, 3, 3,4);
+        List<Integer> parcoursAttendu = Arrays.asList(1,3);
+
+        assertTrue(collectionsDansLeMemeOrdre(resultat, parcoursAttendu));
+    }
+
+    @Test
+    void testParcoursSansRepetitionPions2(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(1, 2, new RouteTerrestre(new Ville("1", false), new Ville("2", false), null, 2)));
+        aretes.add(new Arete(2, 3, new RouteTerrestre(new Ville("2", false), new Ville("3", false), null, 2)));
+        aretes.add(new Arete(1, 3, new RouteMaritime(new Ville("1", false), new Ville("3", false), null, 3)));
+
+        Graphe graphe2 = new Graphe(aretes);
+
+        List<Integer> resultat = graphe2.parcoursSansRepetition(1, 3, 4,3);
+        List<Integer> parcoursAttendu = Arrays.asList(1,3);
+
+        assertTrue(collectionsDansLeMemeOrdre(resultat, parcoursAttendu));
+    }
+
+    @Test
+    void testParcoursSansRepetitionPions3(){
+        List<Arete> aretes = new ArrayList<>();
+        aretes.add(new Arete(1, 2, new RouteTerrestre(new Ville("1", false), new Ville("2", false), null, 2)));
+        aretes.add(new Arete(2, 3, new RouteTerrestre(new Ville("2", false), new Ville("3", false), null, 2)));
+        aretes.add(new Arete(1, 3, new RouteMaritime(new Ville("1", false), new Ville("3", false), null, 3)));
+
+        Graphe graphe2 = new Graphe(aretes);
+
+        List<Integer> resultat = graphe2.parcoursSansRepetition(1, 3, 4,2);
+        List<Integer> parcoursAttendu = Arrays.asList(1,2,3);
+
+        assertTrue(collectionsDansLeMemeOrdre(resultat, parcoursAttendu));
+    }
+
+    
+
 /*
     @Test
     void testGetGraphe{
