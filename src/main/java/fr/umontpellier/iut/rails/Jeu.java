@@ -54,6 +54,7 @@ public class Jeu implements Runnable {
 
     private String instruction;
     private Collection<Bouton> boutons;
+    private Plateau plateau;
 
     public Jeu(String[] nomJoueurs) {
         // initialisation des entrées/sorties
@@ -61,7 +62,7 @@ public class Jeu implements Runnable {
         log = new ArrayList<>();
 
         // création des villes et des routes
-        Plateau plateau = Plateau.makePlateauMonde();
+        plateau = Plateau.makePlateauMonde();
         portsLibres = plateau.getPorts();
         routesLibres = plateau.getRoutes();
 
@@ -115,6 +116,10 @@ public class Jeu implements Runnable {
             joueurs.add(new Joueur(nomJoueur, this, couleurs.remove(0)));
         }
         this.joueurCourant = joueurs.get(0);
+    }
+
+    public Plateau getPlateau(){
+        return plateau;
     }
 
     public List<Joueur> getJoueurs() {

@@ -789,7 +789,7 @@ public class Joueur {
      * s'il n'est pas possible de la compléter
      */
     public Collection<Route> routesPourCompleterDestination(Destination d) {
-        Plateau plateau = Plateau.makePlateauMonde();
+        Plateau plateau = jeu.getPlateau();
         Graphe graphePlateau = plateau.getGraphe();
         List<Integer> sousListe = new ArrayList<>();
 
@@ -824,7 +824,7 @@ public class Joueur {
      * s'il n'est pas possible de la compléter.
      */
     public Collection<Route> routesPourCompleterDestinationAvecPions(Destination d) {
-        Plateau plateau = Plateau.makePlateauMonde();
+        Plateau plateau = jeu.getPlateau();
         Graphe graphePlateau = plateau.getGraphe();
         List<Integer> sousListe = new ArrayList<>();
 
